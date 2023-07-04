@@ -11,10 +11,10 @@ def change(n):
 while True:
       try:
             inp = input().rstrip()
-            if inp =="":
-                  break
-            else:
-                  p = pow(3,int(inp))
+            # if inp =="":
+            #       break
+            # else:
+            p = pow(3,int(inp))
             print(change(p))
       except : 
             break 
