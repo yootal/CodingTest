@@ -2,7 +2,7 @@ board = [list(map(int, input().split())) for _ in range(9)]
 empty_space = [(i, j) for i in range(9) for j in range(9) if board[i][j] == 0]
 
 def is_promising(i, j):
-    promising = [1,2,3,4,5,6,7,8,9]  
+    promising = [1,2,3,4,5,6,7,8,9] 
     
     for k in range(9):
         if board[i][k] in promising: # 가로
@@ -41,6 +41,8 @@ def sudoku(x):
         for num in promising:
             board[i][j] = num #유망한 숫자 중 하나를 넣어줌
             sudoku(x + 1) # 다음 0으로 넘어감
-            board[i][j] = 0 # 초기화 (정답이 없을 경우를 대비)
+            board[i][j] = 0 
+            # 초기화 (정답이 없을 경우를 대비), 복귀해서 판별시 맞게하려고
+        return
             
 sudoku(0)
