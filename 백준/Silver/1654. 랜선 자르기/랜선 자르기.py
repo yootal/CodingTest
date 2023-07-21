@@ -1,24 +1,19 @@
-import sys
-input = sys.stdin.readline
+k,n=map(int,input().split())
+num=[int(input()) for _ in range(k)]
 
-k,n = map(int,input().split())
+st=1
+en=max(num)
 
-num = []
-
-for _ in range(k):
-    num.append(int(input()))
+while st<=en:
+    count=0
+    mid=(st+en)//2
+    for i in range(k):
+        count+=(num[i]//mid)
     
-max_num = max(num)
-left,right = 1,max_num
+    if count>=n:
+        st=mid+1
+    else:
+        en=mid-1
+print(en)
 
-while left <= right:
-    count = 0
-    mid = (left+right)//2
-    for num1 in num:
-        count += (num1//mid)
-    if count >= n:
-        left = mid + 1
-    else: right = mid -1 
 
-print(right)
-    
