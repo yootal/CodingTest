@@ -1,21 +1,21 @@
 import sys
-input=sys.stdin.readline
-k,n=map(int,input().split())
-num=list(map(int,input().split()))
+input = sys.stdin.readline
 
-st=1
-en=max(num)
+n,cut = map(int,input().split())
 
-while st<=en:
-    height=0
-    mid=(st+en)//2
-    for i in num:
-        if i>=mid:
-            height+=(i-mid)
-    if height>=n:
-        st=mid+1
-    else:
-        en=mid-1
-print(en)
+trees = list(map(int,input().split()))
+    
+highest = max(trees)
+left,right = 1,highest
 
+while left <= right:
+    count = 0
+    mid = (left+right)//2
+    for t in trees:
+        if mid <= t:
+            count += (t-mid)
+    if count >= cut:
+        left = mid + 1
+    else: right = mid -1 
 
+print(right)
