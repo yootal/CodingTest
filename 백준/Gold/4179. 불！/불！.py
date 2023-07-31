@@ -43,12 +43,7 @@ for r in range(row):
             fire_point.append((r,c))
         
 bfs(fire_point,0)
-# for v in visited:
-#     print("".join(map(str,v)))
-
 ans = bfs(start_point,1)
-# for v in visited:
-#     print("".join(map(str,v)))
 
 if ans == 0:
     print("IMPOSSIBLE")
