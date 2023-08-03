@@ -1,26 +1,27 @@
-n = int(input())
+import sys
+input=sys.stdin.readline
 
-count = 0
-row = [0] * n
-
-def queen_check(x):
-    for i in range(x):
-        if row[x] == row[i] or abs(row[x] - row[i]) == abs(x - i):
-            return False
-    
-    return True
-
-def n_queens(x):
+def n_queen(cur):
     global count
-    if x == n:
+    if cur == n:
         count += 1
         return
+    for i in range(0,n):
+        if check1[i] or check2[i+cur] or check3[cur-i+n+1]:
+            continue
+        check1[i] = True
+        check2[i+cur] = True
+        check3[cur-i+n+1] = True
+        n_queen(cur + 1)
+        check1[i] = False
+        check2[i+cur] = False
+        check3[cur-i+n+1] = False
 
-    else:
-        for i in range(n):
-            row[x] = i
-            if queen_check(x):
-                n_queens(x+1)
 
-n_queens(0)
+n = int(input())
+count = 0
+check1 = [False]*30
+check2 = [False]*30
+check3 = [False]*30
+n_queen(0)
 print(count)
