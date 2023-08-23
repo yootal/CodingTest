@@ -3,7 +3,7 @@ import sys
 a = int(sys.stdin.readline())
 b = list(map(int, sys.stdin.readline().split()))
 dict = {}
-b1 = list(set(b))
+
 for b3 in b:
       if b3 in dict:
             dict[b3] += 1
