@@ -1,66 +1,54 @@
-class Node:
-    def __init__(self,data,prev,next):
-        self.data = data
-        self.prev = prev
-        self.next = next
-        
-class DList:
-    def __init__(self):
-        self.head = Node(None,None,None)
-        self.tail = Node(None,self.head,None)
-        self.head.next = self.tail
-        self.size = 0
-        
-    def printAll(self):
-        cur = self.head
-        result = []
-        # head부터 다음이 tail일 때 까지 result에 쌓아서 리턴
-        while cur.next is not self.tail:
-            cur = cur.next
-            result.append(cur.data)
-        return result
+import sys
+input = sys.stdin.readline
+
+def traverse():
+    cur = nxt[0] # 첫 시작 인덱스
+    while cur != -1:
+        print(chr(dat[cur] + ord('a')), end = "")
+        cur = nxt[cur]
+    print()
     
-    def insert(self,cur,data):
-        new_node = Node(data,None,None)
-        cur_prev = cur.prev
-        cur_prev.next = new_node
-        cur.prev = new_node
-        new_node.prev = cur_prev
-        new_node.next = cur
-        self.size += 1
-        return cur
+def insert(addr,num):
+    global unused
+    dat[unused] = num 
+    pre[unused] = addr # 새 원소의 pre에 삽입할 위치의 주소 대입
+    nxt[unused] = nxt[addr] # 새 원소의 nxt에 삽입할 위치의 nxt값 대입
+
+    # 삽입할 위치의 nxt값과 삽입할 위치 다음 원소의 pre값을 갱신
+    if nxt[addr] != -1:
+        pre[nxt[addr]] = unused
+    nxt[addr] = unused
     
-    def remove(self, cur):
-        prv = cur.prev.prev
-        cur.prev.prev.next = cur
-        cur.prev = cur.prev.prev
-        self.size -= 1
-        if prv is self.head:
-            return self.head.next
-        else:
-            return cur
-        
-answers=[]
+    unused += 1 # unused 증가
+    
+def erase(addr):
+    # 이전 위치의 nxt를 삭제할 위치의 nxt로 변경
+    nxt[pre[addr]] = nxt[addr]
+    # 다음 위치의 pre를 삭제할 위치의 pre로 변경
+    if nxt[addr] != -1:
+        pre[nxt[addr]] = pre[addr]
+    
 for _ in range(int(input())):
-    ans = DList()
+    mx = 1000001
+    dat = [-1] * mx
+    pre = [-1] * mx
+    nxt = [-1] * mx
+    unused = 1
+    cur = 0
     command = input().rstrip()
-    cur_node = ans.head.next
     for c in command:
         if c == '<':
-            if cur_node.prev == ans.head:
-                continue
-            else: cur_node = cur_node.prev
+            if pre[cur] != -1:
+                cur = pre[cur]
         elif c == '>':
-            if cur_node == ans.tail:
-                continue
-            else:
-                cur_node = cur_node.next
+            if nxt[cur] != -1:
+                cur = nxt[cur]
         elif c == '-':
-            if ans.size == 0 or cur_node.prev == ans.head:
-                continue
-            else:
-                cur_node = ans.remove(cur_node)
+            if pre[cur] != -1:
+                erase(cur)
+                cur = pre[cur]
         else:
-            cur_node = ans.insert(cur_node,c)
-    print("".join(ans.printAll()))
+            insert(cur,ord(c)- ord('a'))
+            cur = nxt[cur]
+    traverse()
     
