@@ -1,18 +1,22 @@
 import sys
-input = sys.stdin.readline
+input=sys.stdin.readline
 
 n = int(input())
-towers = list(map(int,input().split()))
+tower = list(map(int,input().split()))
 stack = []
-ans = [0] * n
-count = 0
 
-for i in range(n-1,-1,-1):
-    while count > 0 and towers[i] > stack[-1][1]:
-        p = stack.pop()
-        count -= 1
-        ans[p[0]] = i + 1
-    stack.append([i,towers.pop()])
-    count += 1
+for i in range(n):
+    stack.append((tower[i],i))
     
-print(" ".join(map(str,ans)))
+stack2 = []
+ans = [0] * n
+cnt = n
+
+while cnt > 0:
+    while stack and stack2 and stack2[-1][0] < stack[-1][0]:
+        t,idx = stack2.pop()
+        ans[idx] = stack[-1][1] + 1
+    stack2.append(stack.pop())
+    cnt -= 1
+    
+print(*ans)
