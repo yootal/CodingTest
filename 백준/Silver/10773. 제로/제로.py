@@ -1,11 +1,13 @@
 import sys
-input=sys.stdin.readline
+input = sys.stdin.readline
 
-input_list = []
-for _ in range(int(input())):
-      inp = int(input())
-      if inp == 0:
-            input_list.pop()
-      else:
-            input_list.append(inp)
-print(sum(input_list))
+n = int(input())
+stack = []
+for _ in range(n):
+    inp = int(input())
+    if inp == 0:
+        stack.pop()
+    else:
+        stack.append(inp)
+
+print(sum(stack))
