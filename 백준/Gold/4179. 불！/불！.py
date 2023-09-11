@@ -1,5 +1,5 @@
-from collections import deque
 import sys
+from collections import deque
 input = sys.stdin.readline
 
 row, col = map(int,input().split())
@@ -48,7 +48,4 @@ ans = bfs(start_point,1)
 if ans == 0:
     print("IMPOSSIBLE")
 else:
-    print(ans)    
-
-
-    
+    print(ans)   
