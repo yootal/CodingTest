@@ -1,30 +1,25 @@
 import sys
-input = sys.stdin.readline
 from collections import deque
+input = sys.stdin.readline
 
-F, S, G, U, D = map(int,input().split())
+f,s,g,u,d = map(int,input().split())
+up_down = [u,-d]
+vis = [0] * f
 
-dy = [U,-D]
-visited = [0] * F
-
-def bfs(f):
-    visited[f] = 1
-    q = deque([f])
+def bfs(now):
+    vis[now] = 1
+    q = deque([now])
     while q:
-        floor = q.popleft()
-        if floor == G-1:
-            return visited[floor]
+        p = q.popleft()
         for i in range(2):
-            ny = floor + dy[i]
-            if ny < 0 or ny > F-1:
-                continue 
-            if visited[ny] == 0:
-                visited[ny] = visited[floor] + 1
-                q.append(ny)
-    return 0
+            np = p + up_down[i]
+            if 0 <= np < f:
+                if vis[np] == 0:
+                    vis[np] = vis[p] + 1
+                    q.append(np)
 
-ans = bfs(S-1)
-if ans == 0:
-    print("use the stairs")
+bfs(s-1)
+if vis[g-1] == 0:
+    print("use the stairs")  
 else:
-    print(ans-1)
+    print(vis[g-1]-1)    
