@@ -60,3 +60,4 @@ while True:
     
     year += 1
     iceberg = melt(iceberg)
+                
