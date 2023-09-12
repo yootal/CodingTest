@@ -1,40 +1,31 @@
-from collections import deque
 import sys
-input=sys.stdin.readline
+from collections import deque
+input = sys.stdin.readline
 
-dy = [1,-1,0,0]
-dx = [0,0,1,-1]
-board = []
+d = [(1,0),(-1,0),(0,1),(0,-1)]
 
 n,m = map(int,input().split())
-for _ in range(n):
-    board.append(input().rstrip())
-  
-# 0은 파괴 가능 1은 불가능
-visited = [[[0]*2 for _ in range(m)] for _ in range(n)]
-visited[0][0][0] = 1
+board = [list(input().rstrip()) for _ in range(n)]
+vis = [[[0] * m for _ in range(n)] for _ in range(2)]
 
-def bfs(i,j,k):
+def bfs(x,y):
+    vis[1][x][y] = 1
     q = deque()
-    q.append((i,j,k))
+    q.append((x,y,1))
     while q:
-        row,col,crash = q.popleft()
-        if row == n-1 and col == m-1:
-            return visited[row][col][crash]
-        for i in range(4):
-            ny = row + dy[i] 
-            nx = col + dx[i]
-            if nx > m-1 or ny > n-1 or nx < 0 or ny < 0:
-                continue
-            # 벽 이고 벽 파괴 가능
-            if board[ny][nx] == '1' and crash == 0:
-                visited[ny][nx][1] = visited[row][col][0] + 1
-                q.append((ny,nx,1))
-            # 벽 아니고 이동 가능
-            elif board[ny][nx] == '0' and visited[ny][nx][crash] == 0:
-                visited[ny][nx][crash] = visited[row][col][crash] + 1 
-                q.append((ny,nx,crash))
+        px,py,wc = q.popleft()
+        if px == n-1 and py == m-1:
+            return vis[wc][px][py]
+        for dx,dy in d:
+            nx = px + dx
+            ny = py + dy
+            if 0 <= nx < n and 0 <= ny < m:
+                if board[nx][ny] == '0' and vis[wc][nx][ny] == 0:
+                    vis[wc][nx][ny] = vis[wc][px][py] + 1
+                    q.append((nx,ny,wc))
+                elif wc > 0 and board[nx][ny] == '1' and vis[wc-1][nx][ny] == 0:
+                    vis[wc-1][nx][ny] = vis[wc][px][py] + 1  
+                    q.append((nx,ny,wc-1))
+    return -1 
 
-    return -1
-                
-print(bfs(0,0,0))
+print(bfs(0,0))
