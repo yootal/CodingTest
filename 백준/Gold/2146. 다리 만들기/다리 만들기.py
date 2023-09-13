@@ -1,72 +1,59 @@
 import sys
 from collections import deque
-
 input = sys.stdin.readline
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
-
-def island_bfs(i, j):
-    global count
-    q = deque()
-    q.append([i, j])
-    vis[i][j] = True
-    arr[i][j] = count
-
-    while q:
-        x, y = q.popleft()
-        for k in range(4):
-            nx = x + dx[k]
-            ny = y + dy[k]
-            if 0 <= nx < n and 0 <= ny < n and arr[nx][ny] == 1 and not vis[nx][ny]:
-                vis[nx][ny] = True
-                arr[nx][ny] = count
-                q.append([nx, ny])
-
-def dist_bfs(z):
-    global answer
-    dist = [[-1] * n for _ in range(n)] 
-    q = deque()
-
-    for i in range(n):
-        for j in range(n):
-            if arr[i][j] == z:
-                q.append([i, j])
-                dist[i][j] = 0
-
-    while q:
-        x, y = q.popleft()
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            if nx < 0 or nx >= n or ny < 0 or ny >= n:
-                continue
-            if arr[nx][ny] > 0 and arr[nx][ny] != z:
-                answer = min(answer, dist[x][y])
-                return
-            if arr[nx][ny] == 0 and dist[nx][ny] == -1:
-                dist[nx][ny] = dist[x][y] + 1
-                q.append([nx, ny])
-
+d = [(-1,0),(1,0),(0,-1),(0,1)]
 
 n = int(input())
+land = [list(map(int,input().split())) for _ in range(n)]
+vis = [[False]* n for _ in range(n)]    
 
-arr = [list(map(int, input().split())) for _ in range(n)]
-vis = [[False] * n for _ in range(n)]
-count = 1
-answer = sys.maxsize
+def limit_check(i,j):
+    return i < 0 or i >= n or j < 0 or j >= n
 
+def island():
+    island_num = 1
+    for i in range(n):
+        for j in range(n):
+            if vis[i][j] or land[i][j] == 0:
+                continue
+            q = deque()
+            q.append((i,j))
+            vis[i][j] = True
+            while q:
+                px,py = q.popleft()
+                land[px][py] = island_num
+                for dx,dy in d:
+                    nx = px + dx
+                    ny = py + dy
+                    if limit_check(nx,ny) or vis[nx][ny] or land[nx][ny] == 0:
+                        continue
+                    q.append((nx,ny))
+                    vis[nx][ny] = True
+            island_num += 1
+            
+island()
+dist = [[-1]* n for _ in range(n)]     
+q = deque()
 for i in range(n):
     for j in range(n):
-        if not vis[i][j] and arr[i][j] == 1:
-            island_bfs(i, j)
-            count += 1
-            
-for i in range(1, count):
-    dist_bfs(i)
+        if land[i][j] != 0:
+            dist[i][j] = 0
+            q.append((i,j))
 
-print(answer)
+ans = sys.maxsize
+while q:
+    px,py = q.popleft()
+    for dx,dy in d:
+        nx = px + dx
+        ny = py + dy
+        if limit_check(nx,ny) or land[nx][ny] == land[px][py]:
+            continue
+        if land[nx][ny] != 0:
+            ans = min(ans, dist[nx][ny] + dist[px][py])
+        else:
+            land[nx][ny] = land[px][py]
+            dist[nx][ny] = dist[px][py] + 1
+            q.append((nx,ny))
 
-                
-
-            
+print(ans)
