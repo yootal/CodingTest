@@ -1,63 +1,47 @@
 import sys
 input=sys.stdin.readline
-from collections import deque
+from collections import deque, defaultdict
 
 dx,dy = [-1,1,0,0],[0,0,-1,1]
 
 def bfs():
-    q = deque()
-    for sp in start_point:
-        for sp2 in sp:
-            q.append(sp2)
-            visited[sp2[0]][sp2[1]] = sp2[2] + 1
-
-    q2 = deque()
-    startP = 0
-    while q:
-        # while q[0][2] == startP % p:
-        while len(q) > 0 and q[0][2] == startP % p:
-            row,col,player = q.popleft()
-            q2.append((row,col,0))
-        while q2:
-            row2,col2,cnt = q2.popleft()
-            
-            if cnt == move[player]:
-                q.append((row2,col2,player))
-                
-            elif cnt < move[player]:
+    while True:
+        check = False
+        for pi in range(1,p+1):
+            q = deque(start_point[pi])
+            nextq = []
+            while q:
+                row,col,step = q.popleft()
+                if step >= move[pi-1]:
+                    nextq.append((row,col,0))
+                    continue
                 for i in range(4):
-                    ny = row2 + dy[i]
-                    nx = col2 + dx[i]
+                    ny = row + dy[i]
+                    nx = col + dx[i]
                     if nx < 0 or nx > m-1 or ny < 0 or ny > n-1:
                         continue
-                    if board[ny][nx] == '.' and visited[ny][nx] == 0:
-                        visited[ny][nx] = player + 1
-                        q2.append((ny,nx,cnt+1))
-        startP+=1
+                    if board[ny][nx] == '.' and not visited[ny][nx]:
+                        q.append((ny,nx,step+1))
+                        visited[ny][nx] = True
+                        player_cnt[pi-1] += 1
+                        check = True
+            start_point[pi] = nextq
+            
+        if not check:
+            break
 
 n,m,p = map(int,input().split())
 move = list(map(int,input().split()))
+board = [input().rstrip() for _ in range(n)]
+visited = [[False] * m for _ in range(n)]
+player_cnt = [0] * p
+start_point = defaultdict(list)
 
-board = []
-for _ in range(n):
-    board.append(input().rstrip())
-    
-visited = [[0] * m for _ in range(n)]
-
-start_point = [[] for _ in range(p)]
 for i in range(n):
     for j in range(m):
-        for num in range(p):
-            if board[i][j] == str(num+1):
-                start_point[num].append((i,j,num))   
+        if board[i][j].isdigit():
+            player_cnt[int(board[i][j])-1] += 1
+            start_point[int(board[i][j])].append((i,j,0))   
                
 bfs()
-
-for pn in range(p):
-    cnt = 0
-    for v in visited:
-        cnt += v.count(pn+1)
-    print(cnt,end = " ")
-                
-     
-
+print(*player_cnt)
