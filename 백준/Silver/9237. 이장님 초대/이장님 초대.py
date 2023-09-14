@@ -5,13 +5,7 @@ n = int(input())
 tree = list(map(int,input().split()))
 tree.sort(reverse=True)
 
-ans = tree[0]
-rest = tree[0]
-day = 1
-while rest:
-    rest -= 1
-    if day < n and rest < tree[day]:
-        rest += tree[day] - rest
-    day += 1
-    
-print(day+1)
+for i in range(n):
+    tree[i] = tree[i] + i + 1 # 심는 일 자라는 일
+
+print(max(tree) + 1)
