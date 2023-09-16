@@ -7,69 +7,73 @@ d = [(-1,0),(1,0),(0,-1),(0,1)]
 def limit_check(i,j):
     return i < 0 or i >= n or j < 0 or j >=m
 
-n,m = map(int,input().split())
-board = [input().rstrip() for _ in range(n)]
-lake = [[0] * m for _ in range(n)]
-swan_vis = [[0] * m for _ in range(n)]
-water_vis = [[0] * m for _ in range(n)]
-water_q = deque()
-ice_q2 = deque()
-swan_q = deque()
-swan_q2 = deque()
-
-ans = 0
-swan_point = []
-for i in range(n):
-    for j in range(m):
-        if board[i][j] == 'X':
-            lake[i][j] = 1
-        if board[i][j] == 'L':
-            swan_point.append((i,j))
-        if board[i][j] != 'X':
-            water_q.append((i,j))
-            
-sx,sy = swan_point[0]
-ex,ey = swan_point[1]
-swan_q.append((sx,sy))
-swan_vis[sx][sy] = 1
-
-while True:
+def find_swan(swan_q,lake):
+    nxt_swan = deque()
     while swan_q:
         x,y = swan_q.popleft()
+        
+        if x == ex and y == ey:
+            return True, None
+        
         for dx,dy in d:
             nx = x + dx
             ny = y + dy
-            if limit_check(nx,ny) or swan_vis[nx][ny]:
+            if limit_check(nx,ny) or visited[nx][ny]:
                 continue
-            if lake[nx][ny] == 1:
-                swan_vis[nx][ny] = 1
-                swan_q2.append((nx,ny))
-                continue
-            elif nx == ex and ny == ey:
-                print(ans)
-                exit()
-            swan_vis[nx][ny] = 1
-            swan_q.append((nx,ny))
+            if lake[nx][ny] == 'X':
+                nxt_swan.append((nx,ny))
+            else:
+                swan_q.append((nx,ny))
+            visited[nx][ny] = True
             
-    while swan_q2:
-        sx2,sy2 = swan_q2.popleft()
-        swan_q.append((sx2,sy2))
-        
-    while water_q:
-        wx,wy = water_q.popleft()
-        water_vis[wx][wy] = 1
-        for dx,dy in d:
-            nx = wx + dx
-            ny = wy + dy
-            if limit_check(nx,ny) or water_vis[nx][ny]:
-                continue
-            if lake[nx][ny] == 1:
-                ice_q2.append((nx,ny))
-            water_vis[nx][ny] = 1
+    return False, nxt_swan    
 
-    while ice_q2:
-        wx,wy = ice_q2.popleft()
-        lake[wx][wy] = 0
-        water_q.append((wx,wy))
-        
-    ans += 1
+def melt(water_q,lake):
+    nxt_water = deque()
+    while water_q:
+        x,y = water_q.popleft()
+        for dx,dy in d:
+            nx = x + dx
+            ny = y + dy
+            if limit_check(nx,ny):
+                continue
+            if lake[nx][ny] == 'X':
+                nxt_water.append((nx,ny))
+                lake[nx][ny] = '.'
+                
+    return nxt_water
+
+n,m = map(int,input().split())
+lake = []
+swan = []
+swan_q = deque()
+water_q = deque()
+
+for r in range(n):
+    lake_inp = list(input().rstrip())
+    for c, info in enumerate(lake_inp):
+        if info == '.' or info == 'L':
+            water_q.append((r,c))
+        if info == 'L':
+            swan.append((r,c))
+    lake.append(lake_inp)
+
+day = 0
+visited = [[False] * m for _ in range(n)]
+
+sx, sy = swan[0]
+ex, ey = swan[1]
+swan_q.append((sx,sy))
+visited[sx][sy] = True
+
+while True:
+    found, nxt_swan = find_swan(swan_q,lake)
+    if found:
+        break
+    day += 1
+    water_q = melt(water_q,lake)
+    swan_q = nxt_swan
+
+print(day)
+
+            
