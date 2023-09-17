@@ -1,27 +1,24 @@
 import sys
-input=sys.stdin.readline
+input = sys.stdin.readline
 
-def dfs():
-    if len(temp) == 6:
-        print(*temp)
+def bt(k,st):
+    if k == 6:
+        print(*arr)
         return
-    for i in range(1,n+1):
-            if len(temp) > 0 and temp[-1] < num_list[i] or not temp:
-                # visited[i] = True
-                temp.append(num_list[i])
-                dfs()
-                # visited[i] = False
-                temp.pop()
+    for i in range(st,n):
+        if not use_check[i]:
+            use_check[i] = True
+            arr[k] = lotto[i]
+            bt(k+1,i)
+            use_check[i] = False
 
 while True:
-    inp = input().rstrip()
-    if inp == '0':
+    inp = list(map(int,input().split()))
+    if inp[0] == 0:
         break
-    else:
-        num_list = list(map(int,inp.split()))
-        temp = []
-        n = num_list[0]
-        # visited = [False] * (n+1)
-        dfs()
-        print()
-
+    n = inp[0]
+    lotto = inp[1:]
+    use_check = [False] * (n)
+    arr = [0] * 6
+    bt(0,0)
+    print()
