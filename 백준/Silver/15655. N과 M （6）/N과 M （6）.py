@@ -1,20 +1,21 @@
 import sys
-input=sys.stdin.readline
-
-def func(ans,cnt):
-    if cnt == m:
-        print(*ans)
-        return
-    for i in range(n):
-        if num_list[i] not in ans:
-            if cnt != 0 and ans[-1] < num_list[i] or cnt == 0:
-                ans.append(num_list[i])
-                func(ans,cnt+1)
-                ans.pop()
+input = sys.stdin.readline
 
 n,m = map(int,input().split())
-num_list = list(map(int,input().split()))
-num_list.sort()
+num = list(map(int,input().split()))
+num.sort()
+use_check = [False] * (n)
+arr = [0] * m
 
-count = 0
-func([],0)
+def bt(k,st):
+    if k == m:
+        print(*arr)
+        return
+    for i in range(st,n):
+        if not use_check[i]:
+            use_check[i] = True
+            arr[k] = num[i] 
+            bt(k+1,i)
+            use_check[i] = False  
+                  
+bt(0,0)
