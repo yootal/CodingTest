@@ -7,25 +7,23 @@ alp.sort()
 used = [False] * c
 arr = [[] for _ in range(l)]
 cnt = 0
-consonant = {'a','e','i','o','u'}
+vowel = {'a','e','i','o','u'}
 
 def bt(k,st):
     global cnt
     if k == l:
         if cnt >= 1 and l - cnt >= 2:
             print(''.join(arr))
-            return
-        else:
-            return
+        return
     for i in range(st,c):
         if not used[i]:
             used[i] = True
             arr[k] = alp[i]
-            if alp[i] in consonant:
+            if alp[i] in vowel:
                 cnt += 1
             bt(k+1,i)
             used[i] = False
-            if alp[i] in consonant:
+            if alp[i] in vowel:
                 cnt -= 1
 
 bt(0,0)
