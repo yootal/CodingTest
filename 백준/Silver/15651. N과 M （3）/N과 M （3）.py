@@ -1,14 +1,16 @@
 import sys
-input=sys.stdin.readline
+input = sys.stdin.readline
 
-def nm(ans):
-      if len(ans)==n2:
-            return print(*ans)
-      for i in range(1,n1+1):
-            ans.append(i)
-            nm(ans)
-            ans.pop()
+n,m = map(int,input().split())
+use_check = [False] * (n+1)
+arr = [0] * m
 
-n1,n2 = map(int,input().split(" "))
-
-nm([])
+def bt(k):
+    if k == m:
+        print(*arr)
+        return
+    for i in range(1,n+1):
+        arr[k] = i
+        bt(k+1)
+        
+bt(0)
