@@ -2,40 +2,25 @@ import sys
 input = sys.stdin.readline
 
 n = int(input())
-board = [[False] * n for _ in range(n)]
-j_check = [False] * n
+check_j = [True] * n
+check_diagonal1 = [True] * (2*n-1)
+check_diagonal2 = [True] * (2*n-1)
 ans = 0
 
-def n_queen(k):
+def n_queen(i):
     global ans
-    if k == n:
+    if i == n:
         ans += 1
         return
     for j in range(n):
-        if not j_check[j] and check(k,j):
-            j_check[j] = True
-            board[k][j] = True
-            n_queen(k+1)
-            j_check[j] = False
-            board[k][j] = False
-        
-def check(x,y):
-    i = x
-    j = y
-    while j > 0 and i > 0:
-        i -= 1
-        j -= 1
-        if board[i][j]:
-            return False
-    i = x
-    j = y
-    while j < n - 1 and i > 0:
-        i -= 1
-        j += 1
-        if board[i][j]:
-            return False
-
-    return True
-
+        if check_j[j] and check_diagonal1[i+j] and check_diagonal2[i-j+n-1]:
+            check_j[j] = False
+            check_diagonal1[i+j] = False
+            check_diagonal2[i-j+n-1] = False
+            n_queen(i+1)
+            check_j[j] = True
+            check_diagonal1[i+j] = True
+            check_diagonal2[i-j+n-1] = True
+    
 n_queen(0)
 print(ans)
