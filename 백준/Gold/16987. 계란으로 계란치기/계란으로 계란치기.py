@@ -1,38 +1,39 @@
 import sys
-input=sys.stdin.readline
+input = sys.stdin.readline
 
-def check(eggs):
-    count = 0
-    for egg in eggs:
-        if egg[0] <= 0:
-            count += 1
-    return count
+n = int(input())
+egg = [list(map(int,input().split())) for _ in range(n)]
+ans = 0
 
-def back_tracking(idx,eggs):
+def bt(now,k):
     global ans
-    if idx == n:
-        ans = max(ans, check(eggs))
+    
+    if now == n:
+        ans = max(ans,k)
         return
     
-    if eggs[idx][0] <= 0: # 현재 계란 내구도 없을 때
-        back_tracking(idx + 1, eggs)
-    else: # 현재 계란 내구도가 남아있을 때 (현재 계란 제외, 내구도 없는 계란 제외)
-        is_all_broken = True
+    if egg[now][0] <= 0:
+        bt(now+1,k)
+    else:
         for i in range(n):
-            if idx != i and eggs[i][0] > 0:
-                is_all_broken = False
-                eggs[idx][0] -= eggs[i][-1]
-                eggs[i][0] -= eggs[idx][-1]
-                back_tracking(idx + 1, eggs)
-                eggs[idx][0] += eggs[i][-1]
-                eggs[i][0] += eggs[idx][-1]
-        if is_all_broken:
-            back_tracking(n, eggs)
+            if i == now:
+                continue
+            if egg[i][0] > 0:
+                egg[now][0] -= egg[i][1]
+                egg[i][0] -= egg[now][1]
+                if egg[now][0] <= 0:
+                    k += 1
+                if egg[i][0] <= 0:
+                    k += 1
+                bt(now+1,k)
+                if egg[now][0] <= 0:
+                    k -= 1
+                if egg[i][0] <= 0:
+                    k -= 1
+                egg[now][0] += egg[i][1]
+                egg[i][0] += egg[now][1]
+            else:
+                bt(now+1,k)
             
-n = int(input())
-eggs = []
-for _ in range(n):
-    eggs.append(list(map(int,input().split())))
-ans = 0
-back_tracking(0,eggs)
+bt(0,0)
 print(ans)
