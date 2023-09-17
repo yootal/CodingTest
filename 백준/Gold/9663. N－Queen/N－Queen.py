@@ -1,27 +1,41 @@
 import sys
-input=sys.stdin.readline
-
-def n_queen(cur):
-    global count
-    if cur == n:
-        count += 1
-        return
-    for i in range(0,n):
-        if check1[i] or check2[i+cur] or check3[cur-i+n+1]:
-            continue
-        check1[i] = True
-        check2[i+cur] = True
-        check3[cur-i+n+1] = True
-        n_queen(cur + 1)
-        check1[i] = False
-        check2[i+cur] = False
-        check3[cur-i+n+1] = False
-
+input = sys.stdin.readline
 
 n = int(input())
-count = 0
-check1 = [False]*30
-check2 = [False]*30
-check3 = [False]*30
+board = [[False] * n for _ in range(n)]
+j_check = [False] * n
+ans = 0
+
+def n_queen(k):
+    global ans
+    if k == n:
+        ans += 1
+        return
+    for j in range(n):
+        if not j_check[j] and check(k,j):
+            j_check[j] = True
+            board[k][j] = True
+            n_queen(k+1)
+            j_check[j] = False
+            board[k][j] = False
+        
+def check(x,y):
+    i = x
+    j = y
+    while j > 0 and i > 0:
+        i -= 1
+        j -= 1
+        if board[i][j]:
+            return False
+    i = x
+    j = y
+    while j < n - 1 and i > 0:
+        i -= 1
+        j += 1
+        if board[i][j]:
+            return False
+
+    return True
+
 n_queen(0)
-print(count)
+print(ans)
