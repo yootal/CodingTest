@@ -1,30 +1,22 @@
-import sys 
+import sys
 input = sys.stdin.readline
 
-N = int(input())
-A = [0]
-A.extend(list(map(int,input().split())))
+n = int(input())
+num = [0] + list(map(int,input().split()))
+pre = [0] * (n+1)
+dp = [0] + [1] * (n)
 
-dp = [1] * (N+1)
-pre = [0] * (N+1)
-
-for i in range(1,N+1):
+for i in range(1,n+1):
     for j in range(1,i):
-        if A[j] < A[i]:
+        if num[i] > num[j]:
             if dp[i] < dp[j] + 1:
                 dp[i] = dp[j] + 1
                 pre[i] = j
-
-M=max(dp)
-idx = dp.index(M)
-
-print(M)
-if idx == 0:
-    print(A[1])
-else:
-    ans = []
-    while idx != 0:
-        ans.append(A[idx])
-        idx = pre[idx]
-    while ans:
-        print(ans.pop(), end = " ")
+                
+print(max(dp))
+k = dp.index(max(dp))
+ans = []
+while k != 0:
+    ans.append(num[k])
+    k = pre[k]
+print(*(reversed(ans)))
