@@ -1,16 +1,19 @@
-n = list(map(int,input()))
-l = len(n)
-dp = [0] * (l+1)
+import sys
+input = sys.stdin.readline
 
-if n[0] == 0:
-    print("0")
-else :
-    n = [0] + n
-    dp[0] = dp[1] =1
-    for i in range(2, l+1):
-        if n[i] > 0:
+code = [0] + list(map(int,list(input().rstrip())))
+n = len(code) - 1
+dp = [0] * (n+1)
+dp[0] = 1
+
+if code[1] == 0:
+    print(0)
+    
+else:
+    for i in range(1,n+1):
+        if code[i] > 0:
             dp[i] += dp[i-1]
-        temp = n[i-1] * 10 + n[i]
-        if temp >= 10 and temp <= 26 :
+        if 10 <= code[i-1] * 10 + code[i] <= 26:
             dp[i] += dp[i-2]
-    print(dp[l] % 1000000)
+
+    print(dp[n] % 1000000)
