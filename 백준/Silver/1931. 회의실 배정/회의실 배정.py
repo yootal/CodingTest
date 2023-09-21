@@ -1,13 +1,8 @@
 import sys
 input = sys.stdin.readline
 
-size = int(input())
-
-meeting = []
-
-for _ in range(size):
-    meeting.append(list(map(int,input().split())))
-
+n = int(input())
+meeting = [tuple(map(int,input().split())) for _ in range(n)]
 meeting.sort(key = lambda x:(x[1], x[0]))
 
 count = 0
