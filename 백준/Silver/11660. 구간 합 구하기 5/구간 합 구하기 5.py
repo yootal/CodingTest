@@ -1,35 +1,15 @@
-import sys 
+import sys
 input = sys.stdin.readline
 
-size,q = map(int,input().split())
+n,m = map(int,input().split())
+board = [list(map(int,input().split())) for _ in range(n)]
 
-num_list=[]
+dp = [[0 for _ in range(n+1)] for _ in range(n+1)]
 
-for _ in range(size):
-    num_list.append(list(map(int,input().split())))
-    
-dp = [0]*(size**2)
-    
-for j in range(size):
-    for i in range(size):
-        if i == 0:
-            dp[size*j] = num_list[j][0]
-        else:
-            dp[size*j+i] = dp[size*j+i-1]+num_list[j][i]
+for i in range(1,n+1):
+    for j in range(1,n+1):
+        dp[i][j] = dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1] + board[i-1][j-1]
 
-for _ in range(q):
+for _ in range(m):
     x1,y1,x2,y2 = map(int,input().split())
-    total = 0
-    x1 -=1
-    y1 -=1
-    y2 -=1
-    for i in range(x1,x2):
-        if y1 == 0:
-            total += dp[size*i+y2]
-        else:
-            total += (dp[size*i+y2]-dp[size*i+y1-1])
-    print(total)
-            
-
-            
-        
+    print(dp[x2][y2] - dp[x1-1][y2] - dp[x2][y1-1] + dp[x1-1][y1-1])  
