@@ -1,6 +1,5 @@
 import sys
-from copy import deepcopy
-inf = sys.maxsize
+sys.setrecursionlimit(10**9)
 input = sys.stdin.readline
 
 d = [(-1,0),(1,0),(0,-1),(0,1)]
@@ -24,6 +23,7 @@ def dfs(x,y):
             continue
         if board[x][y] > board[nx][ny]:
             dp[x][y] += dfs(nx,ny)
+            
     return dp[x][y]
             
 print(dfs(0,0))
