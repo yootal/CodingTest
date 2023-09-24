@@ -9,19 +9,20 @@ b_list = list(map(int,input().split()))
 
 a_list.sort()
 
-def binary_search(target):
+for b1 in b_list:
     left, right = 0, a-1
+    check = False
     
     while left <= right:
         mid = (left + right) // 2
-        if target > a_list[mid]:
+        if b1 == a_list[mid]:
+            check = True
+            print(1)
+            break
+        elif b1 > a_list[mid]:
             left = mid + 1
-        elif target < a_list[mid]:
+        else:
             right = mid - 1
-        else: 
-            return 1
-        
-    return 0
-    
-for b1 in b_list:
-    print(binary_search(b1))
+            
+    if not check:
+        print(0)
