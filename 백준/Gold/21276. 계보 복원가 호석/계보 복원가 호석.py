@@ -1,36 +1,36 @@
 import sys
-input=sys.stdin.readline
-from collections import defaultdict, deque
+from collections import defaultdict
+input = sys.stdin.readline
+
+indegree = defaultdict(int)
+graph = defaultdict(list)
+child = defaultdict(list)
 
 n = int(input())
-village = list(input().rstrip().split())
-village.sort()
+resident = sorted(list(input().rstrip().split()))
 m = int(input())
-familly = defaultdict(list)
-indegree = defaultdict(int)
-ch = defaultdict(list)
-
 for _ in range(m):
-    e,s = input().rstrip().split()         
-    familly[s].append(e)
-    familly[s].sort()
-    indegree[e] += 1
+    x,y = input().rstrip().split()
+    graph[y].append(x)
+    indegree[x] += 1
 
-q = deque()
-for resident in village:
-    if indegree[resident] == 0:
-        q.append(resident)
-        
-print(len(q))
-print(*q)
+ancestor = []
+for name in resident:
+    if not indegree[name]:
+        ancestor.append(name)
 
-for resident in village:
-    for member in familly[resident]:
-        if indegree[member] - indegree[resident] == 1:
-            ch[resident].append(member)
+print(len(ancestor))
+print(*ancestor)
+
+for name in resident:
+    for member in graph[name]:
+        if indegree[member] - indegree[name] == 1:
+            child[name].append(member)
             
-for i in range(n):
-    print(village[i],len(ch[village[i]]),end = " ")
-    for c in ch[village[i]]:
-        print(c, end = " ")
-    print()
+for name in resident:
+    print(name,len(child[name]),end=" ")
+    if len(child[name]) > 0:
+        print(*sorted(child[name]))
+    else:
+        print()
+    
