@@ -1,26 +1,22 @@
 import sys 
 input = sys.stdin.readline
 
-n = int(input())
-num_list = [0]
-dp = [0] * (n+1)
+inp = int(input())
 
-total = 0
+dp = [0 for _ in range(inp)]
+number_list = []
 
-for _ in range(n):
-    num = int(input())
-    num_list.append(num)
-    total += num
+for _ in range(inp):
+    number_list.append(int(input()))
+
+if inp <= 2: 
+    print(sum(number_list))
+
+else:
+    dp[0] = number_list[0]
+    dp[1] = number_list[0] + number_list[1]
     
-if n <= 2:
-    print(total)
-    exit()
+    for i in range(2,inp):
+        dp[i] = max(dp[i-3] + number_list[i-1] + number_list[i], dp[i-2] + number_list[i])
     
-dp[1] = num_list[1]
-dp[2] = num_list[2]
-dp[3] = num_list[3]
-
-for i in range(4,n):
-    dp[i] = min(dp[i-2],dp[i-3]) + num_list[i]
-
-print(total - min(dp[n-1],dp[n-2]))
+    print(dp[inp-1])
