@@ -1,13 +1,21 @@
-from sys import stdin, maxsize
+from sys import stdin
+from math import sqrt
 input = stdin.readline
 
+def solve(n):
+    if int(sqrt(n)) == sqrt(n):
+        return 1
+    
+    for i in range(1, int(sqrt(n)) + 1):
+        if int(sqrt(n - i**2)) == sqrt(n - i**2):
+            return 2
+        
+    for i in range(1, int(sqrt(n)) + 1):
+        for j in range(1, int(sqrt(n - i**2)) + 1):
+            if int(sqrt(n - i**2 - j**2)) == sqrt(n - i**2 - j**2):
+                return 3
+
+    return 4
+
 n = int(input())
-dp = [0,1]
-
-for i in range(2,n+1):
-    min_value = maxsize
-    for j in range(1,int(i**0.5)+1):
-        min_value = min(min_value,dp[i - j ** 2])
-    dp.append(min_value + 1)
-
-print(dp[n])
+print(solve(n))
