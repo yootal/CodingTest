@@ -14,8 +14,12 @@ if k == 0:
     print(dp[n][m])
     
 else:
-    row = k // m + 1
-    col = k % m
+    if k % m == 0:
+        row = k // m
+        col = m
+    else:
+        row = k // m + 1
+        col = k % m
 
     for i in range(1,row+1):
         for j in range(1,col+1):
