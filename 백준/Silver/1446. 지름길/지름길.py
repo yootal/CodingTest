@@ -1,31 +1,14 @@
-from sys import stdin, maxsize
-from collections import defaultdict, deque
+from sys import stdin
 input = stdin.readline
 
 n,d = map(int,input().split())
-path = defaultdict(list)
-for _ in range(n):
-    s,e,c = map(int,input().split())
-    path[s].append((e,c))
+path = [tuple(map(int,input().split())) for _ in range(n)]
+dp = [i for i in range(d+1)]
+for i in range(d+1):
+    if i > 0:
+        dp[i] = min(dp[i],dp[i-1]+1)
+    for s,e,c in path:
+        if i == s and e <= d and dp[i] + c < dp[e]:
+            dp[e] = dp[i] + c
 
-dist = [maxsize] * (d+1)
-
-dq = deque()
-dq.append((0,0))
-dist[0] = 0
-while dq:
-    cur,total = dq.popleft()
-    if dist[cur] < total:
-        continue
-    if path[cur]:
-        for nxt,cost in path[cur]:
-            if nxt <= d:
-                if dist[nxt] > dist[cur] + cost:
-                    dist[nxt] = dist[cur] + cost
-                    dq.append((nxt,dist[nxt]))
-    if cur + 1 <= d:
-        if dist[cur+1] > dist[cur] + 1: 
-            dist[cur+1] = dist[cur] + 1
-            dq.append((cur + 1,dist[cur+1]))
-
-print(dist[d])
+print(dp[d])
