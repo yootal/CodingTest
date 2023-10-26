@@ -9,8 +9,7 @@ def dfs(x,y,d):
     if x == 0 and y == m-1 and d == k:
         ans += 1
     else:
-        board[x][y] = 'T'
-        for dx,dy in [(-1,0),(1,0),(0,-1),(0,1)]:
+        for dx,dy in ((-1,0),(1,0),(0,-1),(0,1)):
             nx = x + dx
             ny = y + dy
             if 0 <= nx < n and 0 <= ny < m and board[nx][ny] == '.':
@@ -19,5 +18,6 @@ def dfs(x,y,d):
                 board[nx][ny] = '.'
 
 ans = 0
+board[n-1][0] = 'T'
 dfs(n-1,0,1)
-print(ans)      
+print(ans)  
