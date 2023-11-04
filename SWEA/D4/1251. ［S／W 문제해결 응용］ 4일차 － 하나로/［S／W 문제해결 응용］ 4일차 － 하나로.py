@@ -1,4 +1,3 @@
-from collections import defaultdict
 from heapq import heappush, heappop
 
 
@@ -7,18 +6,31 @@ def calc_cost(p1, p2):
     return e * dist
 
 
-def prim():
+def find(cur):
+    if parent[cur] != cur:
+        cur = find(parent[cur])
+    return cur
+
+
+def union(x, y):
+    x = find(x)
+    y = find(y)
+    if x == y:
+        return False
+    if x > y:
+        parent[x] = y
+    else:
+        parent[y] = x
+    return True
+
+
+def kruskal(hq):
     total = 0
-    hq = []
-    heappush(hq, (0, 0))
     while hq:
-        cost, cur = heappop(hq)
-        if vis[cur]:
+        cost, a, b = heappop(hq)
+        if not union(a, b):
             continue
-        vis[cur] = True
         total += cost
-        for cost2, nxt in route[cur]:
-            heappush(hq, (cost2, nxt))
     return total
 
 
@@ -28,12 +40,11 @@ for case in range(1, t + 1):
     pos_x = list(map(int, input().split()))
     pos_y = list(map(int, input().split()))
     e = float(input())
-    route = defaultdict(list)
+    parent = list(range(n))
+    route = []
     for i in range(n - 1):
         for j in range(i + 1, n):
             c = calc_cost((pos_x[i], pos_y[i]), (pos_x[j], pos_y[j]))
-            route[i].append((c, j))
-            route[j].append((c, i))
-    vis = [False] * n
-    ans = round(prim())
+            heappush(route, (c, i, j))
+    ans = round(kruskal(route))
     print(f'#{case} {ans}')
