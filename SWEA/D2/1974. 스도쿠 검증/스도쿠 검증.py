@@ -1,25 +1,24 @@
 def sudoku():
+    s = set()
     for i in range(9):
-        vis1 = [False] * 9
-        vis2 = [False] * 9
         for j in range(9):
-            if vis1[board[i][j] - 1]:
+            if board[i][j] in s:
                 return False
-            vis1[board[i][j] - 1] = True
-
+            s.add(board[i][j])
+        s.clear()
         for j in range(9):
-            if vis2[board[j][i] - 1]:
+            if board[j][i] in s:
                 return False
-            vis2[board[j][i] - 1] = True
-
+            s.add(board[j][i])
+        s.clear()
     for i in range(0, 9, 3):
         for j in range(0, 9, 3):
-            vis3 = [False] * 9
             for k in range(3):
                 for l in range(3):
-                    if vis3[board[i + k][j + l] - 1]:
+                    if board[i + k][j + l] in s:
                         return False
-                    vis3[board[i + k][j + l] - 1] = True
+                    s.add(board[i + k][j + l])
+            s.clear()
     return True
 
 
