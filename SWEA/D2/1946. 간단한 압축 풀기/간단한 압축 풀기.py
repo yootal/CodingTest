@@ -1,22 +1,10 @@
-t  = int(input())
-for case in range(1,t+1):
+t = int(input())
+for case in range(1, t + 1):
     n = int(input())
-    all = []
+    s = ''
     for _ in range(n):
-        a,b = input().rstrip().split()
-        for _ in range(int(b)):
-            all.append(a)
-    
-    ans = []
-    string = ""
-    for i in range(len(all)):
-        if len(string) < 10:
-            string += all[i]
-            if len(string) == 10:
-                ans.append(string)
-                string = ""
-    ans.append(string)
-    
+        a, b = input().split()
+        s += a * int(b)
     print(f"#{case}")
-    for doc in ans:
-        print(''.join(doc))
+    for i in range(0, len(s), 10):
+        print(s[i:i + 10])
