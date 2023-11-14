@@ -1,12 +1,13 @@
-t  = int(input())
-for case in range(1,t+1):
-    cnt = {2:0,3:0,5:0,7:0,11:0}
+t = int(input())
+for case in range(1, t + 1):
     n = int(input())
-    for x in cnt.keys():
-        if n == 0:
-            break
-        while n % x == 0:
-            cnt[x] += 1
-            n //= x
-    print(f"#{case}",end=" ")
-    print(*cnt.values())
+    cnt = [0] * 5
+    m = (2, 3, 5, 7, 11)
+    while n != 1:
+        for i in range(5):
+            if n % m[i] == 0:
+                n //= m[i]
+                cnt[i] += 1
+                break
+    print(f'#{case}', end=' ')
+    print(*cnt)
