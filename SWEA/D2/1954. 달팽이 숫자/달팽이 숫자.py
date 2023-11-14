@@ -1,29 +1,24 @@
-t = int(input())
+d = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
-d = [(0,1),(1,0),(0,-1),(-1,0)]
 
-def limit(i,j):
-    return i < 0 or i >= n or j < 0 or j >= n
-
-def snail(i,j,dir,st):
-    while True:
-        board[i][j] = st
-        if st == n**2:
-            return
-        ni = i + d[dir][0]
-        nj = j + d[dir][1]
-        if limit(ni,nj) or board[ni][nj] != 0:
-            snail(i + d[(dir+1)%4][0], j + d[(dir+1)%4][1], (dir+1)%4, st+1)
-            return
-        i = ni
-        j = nj
+def dfs(x, y, st, dir):
+    while 0 <= x < n and 0 <= y < n and matrix[x][y] == 0:
+        matrix[x][y] = st
         st += 1
-                
-for i in range(1,t+1):
+        x += d[dir][0]
+        y += d[dir][1]
+        if st == n ** 2 + 1:
+            return
+    x = x - d[dir][0] + d[(dir + 1) % 4][0]
+    y = y - d[dir][1] + d[(dir + 1) % 4][1]
+    dfs(x, y, st, (dir + 1) % 4)
+
+
+t = int(input())
+for case in range(1, t + 1):
     n = int(input())
-    board = [[0] * n for _ in range(n)]
-    snail(0,0,0,1)
-    
-    print(f"#{i}")
-    for b in board:
-        print(*b)
+    matrix = [[0 for _ in range(n)] for _ in range(n)]
+    dfs(0, 0, 1, 0)
+    print(f'#{case}')
+    for row in matrix:
+        print(*row)
