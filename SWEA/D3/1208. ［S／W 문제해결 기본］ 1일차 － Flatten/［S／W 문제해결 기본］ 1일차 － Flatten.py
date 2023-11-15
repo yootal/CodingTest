@@ -1,19 +1,12 @@
-from heapq import heappush, heappop
-
-for case in range(1,11):
+for case in range(1, 11):
     n = int(input())
-    height = list(map(int,input().split()))
-    max_hq = []
-    min_hq = []
-    for v in height:
-        heappush(max_hq,-v)
-        heappush(min_hq,v)
+    height = list(map(int, input().split()))
     for _ in range(n):
-        if -max_hq[0] - min_hq[0] <= 1:
+        _max = max(height)
+        _min = min(height)
+        if _max - _min < 2:
             break
-        _max = heappop(max_hq)
-        _min = heappop(min_hq)
-        heappush(max_hq,_max+1)
-        heappush(min_hq,_min+1)  
-    ans = -max_hq[0] - min_hq[0]      
+        height[height.index(_max)] -= 1
+        height[height.index(_min)] += 1
+    ans = max(height) - min(height)
     print(f"#{case} {ans}")
