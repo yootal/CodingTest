@@ -1,11 +1,6 @@
-for case in range(1,11):
+for case in range(1, 11):
     n = int(input())
-    check = input().rstrip()
-    sentence = input().rstrip()
-    ans = 0
-    en = len(check)
-    for st in range(len(sentence)):
-        if check == sentence[st:en]:
-            ans += 1
-        en += 1
+    target = input()
+    sentence = input()
+    ans = sentence.count(target)
     print(f"#{case} {ans}")
