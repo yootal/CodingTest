@@ -1,30 +1,27 @@
 from collections import deque
+
 t = int(input())
-for case in range(1,t+1):
+for case in range(1, t + 1):
     n = int(input())
-    day = deque(list(map(int,input().split())))
-    answer = 0
-    cnt = day.count(1)
-    ans = (n // cnt) * 7
-    if n % cnt == 0:
-        ans -= 7
-        r = cnt
+    day = deque(list(map(int, input().split())))
+    day_cnt = day.count(1)
+    week_cnt = n // day_cnt * 7
+    if n % day_cnt == 0:
+        ans = week_cnt
+        week_cnt -= 7
+        r = day_cnt
     else:
-        r = n % cnt
+        ans = week_cnt + 7
+        r = n % day_cnt
     for _ in range(7):
-        st_ans = ans
+        st_ans = week_cnt
         st_r = r
         day.append(day.popleft())
-        for i in range(7):
-            if day[i] == 1:
+        for d in day:
+            st_ans += 1
+            if d:
                 st_r -= 1
-                st_ans += 1
                 if st_r == 0:
-                    break  
-            else:
-                st_ans += 1
-        if answer == 0:
-            answer = st_ans
-        else:
-            answer = min(answer,st_ans)
-    print(f"#{case} {answer}")
+                    ans = min(ans, st_ans)
+                    break
+    print(f'#{case} {ans}')
