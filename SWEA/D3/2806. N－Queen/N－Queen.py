@@ -1,39 +1,35 @@
-def n_queen(k):
-    global ans
-    if k == n:
-        ans += 1
-        return
-    for j in range(n):
-        if not j_check[j] and check(k,j):
-            j_check[j] = True
-            board[k][j] = True
-            n_queen(k+1)
-            j_check[j] = False
-            board[k][j] = False
-        
-def check(x,y):
-    i = x
-    j = y
-    while j > 0 and i > 0:
-        i -= 1
-        j -= 1
-        if board[i][j]:
-            return False
-    i = x
-    j = y
-    while j < n - 1 and i > 0:
-        i -= 1
-        j += 1
-        if board[i][j]:
-            return False
-
+def check(r, c):
+    if diagonal1[r + c]:
+        return False
+    if diagonal2[r - c + n - 1]:
+        return False
+    if column[c]:
+        return False
     return True
 
+
+def n_queen(r):
+    global ans
+    if r == n:
+        ans += 1
+        return
+    for c in range(n):
+        if check(r, c):
+            diagonal1[r + c] = True
+            diagonal2[r - c + n - 1] = True
+            column[c] = True
+            n_queen(r + 1)
+            diagonal1[r + c] = False
+            diagonal2[r - c + n - 1] = False
+            column[c] = False
+
+
 t = int(input())
-for case in range(1,t+1):
+for case in range(1, t + 1):
     n = int(input())
-    board = [[False] * n for _ in range(n)]
-    j_check = [False] * n
+    diagonal1 = [False] * (2 * n - 1)
+    diagonal2 = [False] * (2 * n - 1)
+    column = [False] * n
     ans = 0
     n_queen(0)
-    print(f"#{case} {ans}")
+    print(f'#{case} {ans}')
