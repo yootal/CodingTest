@@ -2,15 +2,16 @@ from collections import defaultdict
 
 t = int(input())
 for case in range(1, t + 1):
-    s = list(input())
+    s = input()
     cnt = defaultdict(int)
-    for a in s:
-        cnt[a] += 1
-    result = []
-    for k, v in sorted(cnt.items(), key=lambda x: x[0]):
-        if v % 2 == 1:
-            result.append(k)
-    if not result:
+    for x in s:
+        cnt[x] += 1
+    ans = []
+    for k, v in cnt.items():
+        if v % 2:
+            ans.append(k)
+    if not ans:
         print(f'#{case} Good')
     else:
-        print(f'#{case}', ''.join(result))
+        ans = ''.join(sorted(ans))
+        print(f'#{case} {ans}')
