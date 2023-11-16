@@ -1,7 +1,4 @@
-def gcd(a, b):
-    if b == 0:
-        return a
-    return gcd(b, a % b)
+from math import gcd
 
 
 def lcm(a, b):
@@ -11,9 +8,10 @@ def lcm(a, b):
 t = int(input())
 for case in range(1, t + 1):
     s1, s2 = input().split()
-    lens = sorted([len(s1), len(s2)])
-    _lcm = lcm(lens[1], lens[0])
-    if s1 * (_lcm // len(s1)) == s2 * (_lcm // len(s2)):
+    ls1 = len(s1)
+    ls2 = len(s2)
+    _lcm = lcm(len(s1), len(s2))
+    if s1 * (_lcm // ls1) == s2 * (_lcm // ls2):
         print(f'#{case} yes')
     else:
         print(f'#{case} no')
