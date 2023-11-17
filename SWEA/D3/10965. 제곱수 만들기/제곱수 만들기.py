@@ -21,6 +21,5 @@ for case in range(1, t + 1):
         else:
             i += 1
     ans.append(f'#{case} {a}')
-
 for x in ans:
     print(x)
