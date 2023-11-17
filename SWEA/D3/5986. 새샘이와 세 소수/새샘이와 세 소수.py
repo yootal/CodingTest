@@ -1,28 +1,30 @@
 def eratosthenes():
-    primes = []
-    num = [False] * 1001
-    for i in range(2, 1001):
+    prime = []
+    num = [False] * 1000
+    for i in range(2, 1000):
         if not num[i]:
-            primes.append(i)
-            for j in range(i * i, 1001, i):
+            prime.append(i)
+            for j in range(i * i, 1000, i):
                 num[j] = True
-    return primes
+    return prime
 
 
 t = int(input())
-prime_list = eratosthenes()
+primes = eratosthenes()
+pl = len(primes)
 for case in range(1, t + 1):
     n = int(input())
     ans = 0
-    for i in range(len(prime_list)):
-        if prime_list[i] * 3 > n:
+    for i2 in range(pl):
+        if primes[i2] * 3 > n:
             break
-        for j in range(i, len(prime_list)):
-            if prime_list[i] + prime_list[j] * 2 > n:
+        for j2 in range(i2, pl):
+            if primes[i2] + primes[j2] * 2 > n:
                 break
-            for k in range(j, len(prime_list)):
-                if prime_list[i] + prime_list[j] + prime_list[k] > n:
+            for k in range(j2, pl):
+                _sum = primes[i2] + primes[j2] + primes[k]
+                if _sum > n:
                     break
-                if prime_list[i] + prime_list[j] + prime_list[k] == n:
+                if _sum == n:
                     ans += 1
     print(f'#{case} {ans}')
