@@ -1,17 +1,14 @@
 t = int(input())
 for case in range(1, t + 1):
-    n, d, g = map(int, input().split())
-    if d != 0 and g == 0:
+    n, pd, pg = map(int, input().split())
+    if pg == 0 and pd != 0:
         print(f'#{case} Broken')
-    elif d != 100 and g == 100:
+    elif pg == 100 and pd != 100:
         print(f'#{case} Broken')
     else:
-        check = False
-        for k in range(1, n + 1):
-            if (k * d / 100) == (k * d // 100):
-                check = True
+        for i in range(1, n + 1):
+            if i * pd / 100 == i * pd // 100:
+                print(f'#{case} Possible')
                 break
-        if check:
-            print(f'#{case} Possible')
         else:
             print(f'#{case} Broken')
