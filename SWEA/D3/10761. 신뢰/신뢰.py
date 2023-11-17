@@ -1,17 +1,17 @@
 t = int(input())
 for case in range(1, t + 1):
     inp = list(input().split())
-    n = int(inp[0])
-    ans = {'O': [1, 0], 'B': [1, 0]}
-    cnt = 0
-    for i in range(1, n * 2, 2):
-        cur = inp[i]
-        p = int(inp[i + 1])
-        gap = abs(p - ans[cur][0])
-        time = cnt - ans[cur][1]
+    n = inp[0]
+    info = {'O': [1, 0], 'B': [1, 0]}
+    ans = 0
+    for i in range(1, len(inp), 2):
+        u = inp[i]
+        nxt = int(inp[i + 1])
+        gap = abs(nxt - info[u][0])
+        time = ans - info[u][1]
         if gap <= time:
-            cnt += 1
+            ans += 1
         else:
-            cnt += gap - time + 1
-        ans[cur] = [p, cnt]
-    print(f'#{case} {cnt}')
+            ans += gap - time + 1
+        info[u] = [nxt, ans]
+    print(f'#{case} {ans}')
