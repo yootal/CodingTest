@@ -1,40 +1,38 @@
 import sys
 input=sys.stdin.readline
-sys.setrecursionlimit(10**6)
 from collections import defaultdict
 
 n = int(input())
 lc = defaultdict(str)
 rc = defaultdict(str)
-
 for _ in range(n):
-    m,l,r = input().rstrip().split()
+    p,l,r = input().rstrip().split()
     if l != '.':
-        lc[m] = l
+        lc[p] = l
     if r != '.':
-        rc[m] = r
+        rc[p] = r
 
-def preorder(cur):
-    print(cur, end = "")
-    if lc[cur]:
-        preorder(lc[cur])
-    if rc[cur]:
-        preorder(rc[cur]) 
-        
-def inorder(cur):
-    if lc[cur]:
-        inorder(lc[cur])
-    print(cur, end = "")
-    if rc[cur]:
-        inorder(rc[cur]) 
-        
-def postorder(cur):
-    if lc[cur]:
-        postorder(lc[cur])
-    if rc[cur]:
-        postorder(rc[cur]) 
-    print(cur, end = "")
+def preorder(s):
+    print(s,end="")
+    if lc[s]:
+        preorder(lc[s])
+    if rc[s]:
+        preorder(rc[s])
+
+def inorder(s):
+    if lc[s]:
+        inorder(lc[s])
+    print(s,end="")
+    if rc[s]:
+        inorder(rc[s])
     
+def postorder(s):
+    if lc[s]:
+        postorder(lc[s])
+    if rc[s]:
+        postorder(rc[s])
+    print(s,end="")
+
 preorder('A')
 print()
 inorder('A')
