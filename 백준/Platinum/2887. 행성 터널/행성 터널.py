@@ -1,9 +1,6 @@
 import sys
 input = sys.stdin.readline
 
-def calc_dist(a,b):
-    return min(abs(a[0]-b[0]),abs(a[1]-b[1]),abs(a[2]-b[2]))
-
 def find(x):
     if p[x] != x:
         p[x] = find(p[x])
@@ -22,20 +19,25 @@ def union(a,b):
     
 n = int(input())
 p = list(range(n+1))
+planet_x = []
+planet_y = []
+planet_z = []
 
-planet = []
 for i in range(1,n+1):
-    planet.append(list(map(int,input().split()))+[i])
+    x,y,z = map(int,input().split())
+    planet_x.append((x,i))
+    planet_y.append((y,i))
+    planet_z.append((z,i))
 
-planet_x = sorted(planet,key = lambda x: x[0])
-planet_y = sorted(planet,key = lambda x: x[1])
-planet_z = sorted(planet,key = lambda x: x[2])
+planet_x.sort()
+planet_y.sort()
+planet_z.sort()
 
 planet_dist = []
 for i in range(1,n):
-    planet_dist.append((calc_dist(planet_x[i-1],planet_x[i]),planet_x[i-1][3],planet_x[i][3]))
-    planet_dist.append((calc_dist(planet_y[i-1],planet_y[i]),planet_y[i-1][3],planet_y[i][3]))
-    planet_dist.append((calc_dist(planet_z[i-1],planet_z[i]),planet_z[i-1][3],planet_z[i][3]))
+    planet_dist.append((abs(planet_x[i-1][0]-planet_x[i][0]),planet_x[i-1][1],planet_x[i][1]))
+    planet_dist.append((abs(planet_y[i-1][0]-planet_y[i][0]),planet_y[i-1][1],planet_y[i][1]))
+    planet_dist.append((abs(planet_z[i-1][0]-planet_z[i][0]),planet_z[i-1][1],planet_z[i][1]))
 planet_dist.sort()
 
 ans = 0
@@ -45,4 +47,3 @@ for cost,a,b in planet_dist:
     ans += cost
 
 print(ans)
-        
