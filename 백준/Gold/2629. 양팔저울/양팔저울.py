@@ -8,7 +8,6 @@ w2 = list(map(int, input().split()))
 max_weight = sum(w)
 
 dp = [[False] * (max_weight + 1) for _ in range(n + 1)]
-dp[0][0] = True
 
 for i in range(1, n + 1):
     weight = w[i - 1]
