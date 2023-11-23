@@ -9,21 +9,24 @@ max_weight = sum(w)
 
 dp = [[False] * (max_weight + 1) for _ in range(n + 1)]
 
-for i in range(1, n + 1):
-    weight = w[i - 1]
-    dp[i][weight] = True
-    for j in range(1, max_weight + 1):
-        if dp[i - 1][j]:
-            dp[i][j] = True
-            if j < weight:
-                dp[i][weight - j] = True
-            else:
-                dp[i][j - weight] = True
-        if j >= weight and dp[i - 1][j - weight]:
-            dp[i][j] = True
+result = set()
+
+def solve(pends, cnt, now, left, right):
+    new = abs(left - right)
+    if new not in result:
+        result.add(new)
+    if now == cnt:
+        return
+    if not dp[now][new]:
+        solve(pends, cnt, now + 1, left + w[now], right)
+        solve(pends, cnt, now + 1, left, right + w[now])
+        solve(pends, cnt, now + 1, left, right)
+        dp[now][new] = True
+
+solve(w, n, 0, 0, 0)
 
 for i in w2:
-    if i > max_weight or not dp[n][i]:
-        print('N', end=' ')
-    else:
+    if i in result:
         print('Y', end=' ')
+    else:
+        print('N', end=' ')
