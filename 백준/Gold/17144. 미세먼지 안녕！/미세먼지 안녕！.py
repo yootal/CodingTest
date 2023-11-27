@@ -1,5 +1,4 @@
 from sys import stdin
-from collections import defaultdict
 from copy import deepcopy
 input = stdin.readline
 
@@ -18,7 +17,6 @@ for r in range(R):
 for _ in range(T):
     
     # 확산
-    # temp_board = [[0] * C for _ in range(R)]
     temp_board = deepcopy(board)
     for i in range(R):
         for j in range(C):
@@ -34,12 +32,7 @@ for _ in range(T):
                         temp_board[nx][ny] += int(board[i][j] / 5)
                 temp_board[i][j] -= (int(board[i][j] / 5) * cnt)
                 
-    # print()
-    # for row in temp_board:
-    #     print(*row)
-    
     #  순환
-    # temp_board2 = [[0] * C for _ in range(R)]
     temp_board2 = deepcopy(temp_board)
     for i1 in range(1,C):
         temp_board2[air_cleaner[0]][i1] = temp_board[air_cleaner[0]][i1-1]
@@ -59,21 +52,9 @@ for _ in range(T):
     for j4 in range(R-2,air_cleaner[1]-1,-1):
         temp_board2[j4][0] = temp_board[j4+1][0]
     
-    # for i in range(1,air_cleaner[0]):
-    #     for j in range(1,C-1):
-    #         temp_board2[i][j] = temp_board[i][j]
-    
-    # for i in range(air_cleaner[1]+1,R-1):
-    #     for j in range(1,C-1):
-    #         temp_board2[i][j] = temp_board[i][j]
-    
     temp_board2[air_cleaner[0]][0] = 0
     temp_board2[air_cleaner[1]][0] = 0
         
     board = temp_board2
 
-# print()
-# for row in board:
-#     print(*row)
 print(sum([sum(row) for row in board]))
-            
