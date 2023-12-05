@@ -1,5 +1,4 @@
 from sys import stdin
-from collections import deque
 input = stdin.readline
 
 n = int(input())
@@ -8,28 +7,19 @@ m = int(input())
 box = list(map(int,input().split()))
 
 crane.sort(reverse=True)
-box.sort()
-idx = 0
+box.sort(reverse=True)
 ans = 0
 
-if crane[idx] < box[-1]:
-    print(-1)
-    exit()
-    
-while box:
-    if idx == n:
+if crane[0] < box[0]:
+    ans = -1
+else:
+    while box:
+        for cw in crane:
+            if box and cw < box[-1]:
+                continue
+            for bw in box:
+                if cw >= bw:
+                    box.remove(bw)
+                    break
         ans += 1
-        idx = 0
-        continue
-    temp = deque()
-    while box and crane[idx] < box[-1]:
-        temp.appendleft(box.pop())
-    if box:
-        box.pop()
-        idx += 1
-    else:
-        ans += 1
-        idx = 0
-    box.extend(temp)
-ans += 1
 print(ans)
