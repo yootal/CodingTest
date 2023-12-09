@@ -15,7 +15,7 @@ def bimatch(x):
 t = int(input())
 for _ in range(t):
     n,m = map(int,input().split())
-    select = [0] * (n+1)
+    select = [0] * (n+1) # 책이 누구에게 선택돼있는지 나타냄
     graph = defaultdict(list)
     
     for i in range(1,m+1):
