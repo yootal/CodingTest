@@ -28,7 +28,5 @@ def check(x):
 
 n = int(input())
 num = list(input().rstrip().split())
-# for x2 in num:
-#     print(check(x2))
 num.sort(key=lambda x: (check(x),len(x)),reverse=True)
 print(int(''.join(num)))
