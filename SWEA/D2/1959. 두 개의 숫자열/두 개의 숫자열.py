@@ -1,15 +1,15 @@
 t = int(input())
-for case in range(1, t + 1):
-    n, m = map(int, input().split())
-    num1 = list(map(int, input().split()))
-    num2 = list(map(int, input().split()))
+for case in range(1,t+1):
+    n,m = map(int,input().split())
+    a = list(map(int,input().split()))
+    b = list(map(int,input().split()))
+    if n < m:
+        n,m = m,n
+        a,b = b,a
     ans = 0
-    if n > m:
-        n, m = m, n
-        num1, num2 = num2, num1
-    for i in range(m - n + 1):
-        total = 0
-        for j in range(n):
-            total += num1[j] * num2[i + j]
-        ans = max(ans, total)
+    for i in range(n-m+1):
+        _sum = 0
+        for j in range(m):
+            _sum += a[i+j] * b[j]
+        ans = max(ans, _sum)
     print(f'#{case} {ans}')
