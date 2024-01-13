@@ -10,7 +10,7 @@ public class Main {
 		int ans = 0;
 		String sNum = br.readLine();
 		for (int i = 0; i < N; i++) {
-			ans += sNum.charAt(i) - '0';
+			ans += Character.getNumericValue(sNum.charAt(i));
 		}
 		sb.append(ans);
 		System.out.println(sb);
