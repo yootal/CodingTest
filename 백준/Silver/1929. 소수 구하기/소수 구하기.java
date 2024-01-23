@@ -1,9 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-import java.io.*;
-import java.util.*;
-
 public class Main {
 	static int M;
 	static int N;
