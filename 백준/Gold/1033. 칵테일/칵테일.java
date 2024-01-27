@@ -8,7 +8,7 @@ public class Main {
 	static boolean[] vis;
 
 	public static void main(String[] args) throws Exception {
-		//System.setIn(new FileInputStream("res/input.txt"));
+		// System.setIn(new FileInputStream("res/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		StringTokenizer st;
@@ -27,22 +27,14 @@ public class Main {
 			int b = Integer.parseInt(st.nextToken());
 			int p = Integer.parseInt(st.nextToken());
 			int q = Integer.parseInt(st.nextToken());
-			int[] temp = new int[] { p, q };
-			Arrays.sort(temp);
-			long gcd_inp = gcd(temp[1], temp[0]);
 			long gcd_ans = gcd(ans[a], ans[b]);
+			long gcd_inp = gcd(p, q);
 			long lcm = ans[a] / gcd_ans * ans[b];
 			vis = new boolean[n];
-			dfs(a, lcm / ans[a]);
-			dfs(b, lcm / ans[b]);
-			vis = new boolean[n];
-			if (p / gcd_inp > 0)
-				dfs(a, p / gcd_inp);
-			if (q / gcd_inp > 0)
-				dfs(b, q / gcd_inp);
+			dfs(a, lcm / ans[a] * p / gcd_inp);
+			dfs(b, lcm / ans[b] * q / gcd_inp);
 			graph[a].add(b);
 			graph[b].add(a);
-//			System.out.println(Arrays.toString(ans));
 		}
 		long end_gcd = ans[0];
 		for (int i = 0; i < n - 1; i++) {
