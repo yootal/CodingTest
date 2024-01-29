@@ -71,7 +71,7 @@ public class Main {
 					dcheck = true;
 				}
 				return true;
-			} else if (cnt > 5) {
+			} else {
 				int nx2 = i;
 				int ny2 = j;
 				for (int k = 0; k < cnt; k++) {
