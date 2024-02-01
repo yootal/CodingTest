@@ -1,39 +1,38 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
-	static int N;
+	static int n;
 	static StringBuilder sb;
 
 	public static void main(String[] args) throws Exception {
-		// System.setIn(new FileInputStream("res/input.txt"));
+		//System.setIn(new FileInputStream("res/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
+		n = Integer.parseInt(br.readLine());
 		sb = new StringBuilder();
-		back_tracking(2, 1);
-		back_tracking(3, 1);
-		back_tracking(5, 1);
-		back_tracking(7, 1);
-		System.out.println(sb);
+		dfs(2, 1);
+		dfs(3, 1);
+		dfs(5, 1);
+		dfs(7, 1);
+		System.out.print(sb);
 	}
 
-	static void back_tracking(int num, int cnt) {
-		if (cnt == N) {
-			sb.append(num).append("\n");
+	static void dfs(int x, int cnt) {
+		if (cnt == n) {
+			sb.append(x).append("\n");
 			return;
 		}
-		for (int i = 1; i <= 9; i++) {
-			if (i % 2 == 0)
-				continue;
-			int num_nxt = num * 10 + i;
-			if (isPrime(num_nxt)) {
-				back_tracking(num_nxt, cnt + 1);
+		for (int i = 1; i < 10; i += 2) {
+			int nxt = x * 10 + i;
+			if (check(nxt)) {
+				dfs(nxt, cnt + 1);
 			}
 		}
 	}
 
-	static boolean isPrime(int x) {
-		for (int i = 2; i <= x / 2; i++) {
-			if (x % i == 0)
+	static boolean check(int x) {
+		for (int j = 2; j <= x / 2; j++) {
+			if (x % j == 0)
 				return false;
 		}
 		return true;
