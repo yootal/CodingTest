@@ -10,7 +10,7 @@ public class Solution {
 	static int total;
 
 	public static void main(String[] args) throws Exception {
-		// System.setIn(new FileInputStream("res/input.txt"));
+		//System.setIn(new FileInputStream("res/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int t = Integer.parseInt(br.readLine());
 		StringTokenizer stt;
@@ -47,6 +47,7 @@ public class Solution {
 					}
 				}
 				ans = Math.max(ans, max);
+				// total 수보다 커지면 더 못커짐
 				if (ans == total)
 					break;
 				k++;
@@ -57,16 +58,16 @@ public class Solution {
 	}
 
 	static int counting(int x, int y, int k) {
-		range = 2 * k - 1;
-		center = k - 1;
+		range = 2 * k - 1; // 마름모 범위
+		center = k - 1; // 중앙 인덱스
 		int total = 0;
 		int st = range / 2, en = range / 2;
 		for (int i = 0; i < range; i++) {
 			for (int j = st; j < en + 1; j++) {
 				int bx = i - (center - x);
 				int by = j - (center - y);
-				if (bx >= 0 && bx < n && by >= 0 && by < n)
-					total += board[bx][by];
+				if (bx >= 0 && bx < n && by >= 0 && by < n) // 범위안 좌표만 계산
+					total += board[bx][by]; 
 			}
 			if (i < range / 2) {
 				st--;
