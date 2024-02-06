@@ -2,64 +2,65 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int n;
-	static int m;
-	static int r;
+	static int N;
+	static int M;
+	static int know;
 	static int standard;
 	static int[] parent;
 	static int[] record;
+	static int[] knows;
 
 	public static void main(String[] args) throws Exception {
 		//System.setIn(new FileInputStream("res/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		record = new int[m];
-		parent = new int[n + 1];
-		for (int i = 1; i <= n; i++) {
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		int ans = 0;
+		parent = new int[N + 1];
+		for (int i = 1; i <= N; i++) {
 			parent[i] = i;
 		}
-		int ans = 0;
-		int check = 0;
 		st = new StringTokenizer(br.readLine());
-		int know = Integer.parseInt(st.nextToken());
-		if (know != 0) {
-			int[] knows = new int[know];
-			for (int i = 0; i < know; i++) {
-				knows[i] = Integer.parseInt(st.nextToken());
-			}
-			standard = knows[0];
-			for (int i = 1; i < know; i++) {
-				union(standard, knows[i]);
-			}
-			check = find(standard);
+		know = Integer.parseInt(st.nextToken());
+		knows = new int[know];
+		for (int i = 0; i < know; i++) {
+			knows[i] = Integer.parseInt(st.nextToken());
 		}
-		for (int i = 0; i < m; i++) {
+		record = new int[M];
+		for (int i = 0; i < M; i++) {
 			st = new StringTokenizer(br.readLine());
-			r = Integer.parseInt(st.nextToken());
+			int len = Integer.parseInt(st.nextToken());
 			int start = Integer.parseInt(st.nextToken());
-			for (int j = 1; j < r; j++) {
+			for (int j = 1; j < len; j++) {
 				union(start, Integer.parseInt(st.nextToken()));
 			}
 			record[i] = find(start);
 		}
-		for (int p : record) {
-			if (find(p) != find(check))
+		for (int i = 0; i < M; i++) {
+			boolean check = true;
+			for (int j = 0; j < know; j++) {
+				if (find(record[i]) == find(knows[j])) {
+					check = false;
+					break;
+				}
+			}
+			if (check)
 				ans++;
 		}
 		System.out.println(ans);
 	}
 
 	static void union(int x, int y) {
-		int px = find(x);
-		int py = find(y);
-
-		if (px > py) {
-			parent[px] = py;
-		} else {
-			parent[py] = px;
-		}
+		x = find(x);
+		y = find(y);
+//		if (px > py) {
+//			parent[px] = py;
+//		} else {
+//			parent[py] = px;
+//		}
+		if (x != y)
+			parent[y] = x;
 	}
 
 	static int find(int x) {
