@@ -1,56 +1,75 @@
-from collections import deque
+import java.io.*;
+import java.util.*;
 
-d = ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1))
+public class Solution {
+	static final int[] dx = { -1, -1, 0, 1, 1, 1, 0, -1 };
+	static final int[] dy = { 0, 1, 1, 1, 0, -1, -1, -1 };
 
+	public static void main(String[] args) throws Exception {
+		//System.setIn(new FileInputStream("res/input.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		int t = Integer.parseInt(br.readLine());
+		for (int tc = 1; tc <= t; tc++) {
+			int n = Integer.parseInt(br.readLine());
+			int[][] board = new int[n][n];
+			for (int i = 0; i < n; i++) {
+				String row = br.readLine();
+				for (int j = 0; j < n; j++) {
+					if (row.charAt(j) == '*')
+						board[i][j] = -1;
+				}
+			}
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (board[i][j] != -1) {
+						int count = 0;
+						for (int d = 0; d < 8; d++) {
+							int nx = i + dx[d];
+							int ny = j + dy[d];
+							if (nx >= 0 && nx < n && ny >= 0 && ny < n && board[nx][ny] == -1) {
+								count++;
+							}
+						}
+						board[i][j] = count;
+					}
+				}
+			}
+			ArrayDeque<int[]> q = new ArrayDeque<>();
+			int ans = 0;
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (board[i][j] == 0) {
+						ans++;
+						q.offerLast(new int[] { i, j });
+						board[i][j] = -1;
+						while (!q.isEmpty()) {
+							int[] cur = q.pollFirst();
+							for (int d = 0; d < 8; d++) {
+								int nx = cur[0] + dx[d];
+								int ny = cur[1] + dy[d];
+								if (nx >= 0 && nx < n && ny >= 0 && ny < n && board[nx][ny] != -1) {
+									if (board[nx][ny] == 0) {
+										board[nx][ny] = -1;
+										q.offerLast(new int[] { nx, ny });
+									} else {
+										board[nx][ny] = -1;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (board[i][j] != -1)
+						ans++;
+				}
+			}
+			sb.append("#").append(tc).append(" ").append(ans).append("\n");
+		}
+		System.out.print(sb);
+	}
 
-def count(x, y):
-    cnt = 0
-    for dx, dy in d:
-        nx = x + dx
-        ny = y + dy
-        if 0 <= nx < n and 0 <= ny < n:
-            if board[nx][ny] == '*':
-                cnt += 1
-    board[x][y] = cnt
-
-
-def check(i, j):
-    q = deque()
-    q.append((i, j))
-    board[i][j] = '*'
-    while q:
-        x, y = q.popleft()
-        for dx, dy in d:
-            nx = x + dx
-            ny = y + dy
-            if 0 <= nx < n and 0 <= ny < n:
-                if board[nx][ny] == 0:
-                    board[nx][ny] = '*'
-                    q.append((nx, ny))
-                elif board[nx][ny] != '*':
-                    board[nx][ny] = '*'
-
-
-t = int(input())
-for case in range(1, t + 1):
-    n = int(input())
-    board = [list(input().rstrip()) for _ in range(n)]
-
-    for i in range(n):
-        for j in range(n):
-            if board[i][j] == '.':
-                count(i, j)
-
-    ans = 0
-    for i in range(n):
-        for j in range(n):
-            if board[i][j] == 0:
-                ans += 1
-                check(i, j)
-
-    for i in range(n):
-        for j in range(n):
-            if board[i][j] != '*':
-                ans += 1
-
-    print(f'#{case} {ans}')
+}
