@@ -1,37 +1,50 @@
-from collections import deque
+import java.io.*;
+import java.util.*;
 
+public class Solution {
+	static final int[] dx = { -1, 0, 1, 0 };
+	static final int[] dy = { 0, 1, 0, -1 };
+	static char board[][];
+	static int[] st = new int[2];
+	static boolean ans;
 
-def bfs(st):
-    vis[st[0]][st[1]] = True
-    dq = deque()
-    dq.append((st[0], st[1]))
-    while dq:
-        x, y = dq.popleft()
-        if board[x][y] == 3:
-            return True
-        for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
-            nx = x + dx
-            ny = y + dy
-            if 0 <= nx < 100 and 0 <= ny < 100:
-                if not vis[nx][ny] and board[nx][ny] != 1:
-                    vis[nx][ny] = True
-                    dq.append((nx, ny))
-    return False
+	public static void main(String[] args) throws Exception {
+		//System.setIn(new FileInputStream("res/input.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		board = new char[100][100];
+		for (int tc = 1; tc < 11; tc++) {
+			int n = Integer.parseInt(br.readLine());
+			for (int i = 0; i < 100; i++) {
+				String row = br.readLine();
+				for (int j = 0; j < 100; j++) {
+					char c = row.charAt(j);
+					board[i][j] = c;
+					if (c == '2') {
+						st[0] = i;
+						st[1] = i;
+					}
+				}
+			}
+			ans = false;
+			dfs(st[0], st[1]);
+			sb.append("#").append(n).append(" ").append(ans ? 1 : 0).append("\n");
+		}
+		System.out.print(sb);
+	}
 
-
-def find_start():
-    for i in range(100):
-        for j in range(100):
-            if board[i][j] == 2:
-                return (i, j)
-
-
-for case in range(1, 10 + 1):
-    n = int(input())
-    board = [list(map(int, input().rstrip())) for _ in range(100)]
-    vis = [[False] * 100 for _ in range(100)]
-    st = find_start()
-    if bfs(st):
-        print(f'#{n} 1')
-    else:
-        print(f'#{n} 0')
+	static void dfs(int x, int y) {
+		if (board[x][y] == '3') {
+			ans = true;
+			return;
+		}
+		board[x][y] = '1';
+		for (int d = 0; d < 4; d++) {
+			int nx = x + dx[d];
+			int ny = y + dy[d];
+			if (nx >= 0 && nx < 100 && ny >= 0 && ny < 100 && board[nx][ny] != '1') {
+				dfs(nx, ny);
+			}
+		}
+	}
+}
