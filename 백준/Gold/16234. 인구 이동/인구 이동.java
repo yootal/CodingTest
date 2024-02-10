@@ -14,30 +14,28 @@ public class Main {
 		int R = Integer.parseInt(st.nextToken());
 		int[][] area = new int[N][N];
 		int[][] vis = new int[N][N];
+		int[][] nxtArea = new int[N][N];
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < N; j++) {
 				area[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
-		Queue<int[]> q;
-		ArrayList<int[]> r;
-		int[][] nxtArea;
+		Queue<int[]> q = new ArrayDeque<>(); ;
+		ArrayList<int[]> r = new ArrayList<>();;
 		boolean flag;
 		int day = 1;
 		while (true) {
-			nxtArea = new int[N][N];
 			flag = true;
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
 					if (vis[i][j] == day)
 						continue;
+					r.clear();
 					vis[i][j] = day;
 					int cnt = 1;
 					int total = area[i][j];
-					q = new ArrayDeque<>();
 					q.offer(new int[] { i, j });
-					r = new ArrayList<>();
 					r.add(new int[] { i, j });
 					while (!q.isEmpty()) {
 						int[] cur = q.poll();
