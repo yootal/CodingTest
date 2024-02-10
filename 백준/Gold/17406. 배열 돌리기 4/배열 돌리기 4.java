@@ -20,6 +20,7 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
 		arr = new int[N][M];
+		copyArr = new int[N][M];
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < M; j++) {
@@ -55,7 +56,6 @@ public class Main {
 
 	static void perm(int cnt) {
 		if (cnt == K) {
-			copyArr = new int[N][M];
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < M; j++) {
 					copyArr[i][j] = arr[i][j];
