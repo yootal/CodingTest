@@ -11,31 +11,31 @@ public class Main {
 		int E = Integer.parseInt(stt.nextToken());
 		int st = Integer.parseInt(br.readLine());
 		int[] sdt = new int[V + 1];
-		ArrayList<int[]>[] graph = new ArrayList[V + 1];
+		ArrayList<Edge>[] graph = new ArrayList[V + 1];
 		for (int i = 0; i <= V; i++) {
-			graph[i] = new ArrayList<int[]>();
+			graph[i] = new ArrayList<Edge>();
 		}
 		for (int i = 0; i < E; i++) {
 			stt = new StringTokenizer(br.readLine());
 			int u = Integer.parseInt(stt.nextToken());
 			int v = Integer.parseInt(stt.nextToken());
 			int w = Integer.parseInt(stt.nextToken());
-			graph[u].add(new int[] { v, w });
+			graph[u].add(new Edge(v, w));
 		}
 		for (int i = 1; i <= V; i++) {
 			sdt[i] = Integer.MAX_VALUE;
 		}
 		sdt[st] = 0;
-		PriorityQueue<int[]> pq = new PriorityQueue<int[]>(Comparator.comparing(o -> o[1]));
-		pq.offer(new int[] { st, sdt[st] });
+		PriorityQueue<Edge> pq = new PriorityQueue<Edge>();
+		pq.offer(new Edge(st, sdt[st]));
 		while (!pq.isEmpty()) {
-			int[] cur = pq.poll();
-			if (cur[1] != sdt[cur[0]])
+			Edge cur = pq.poll();
+			if (cur.value != sdt[cur.vertex])
 				continue;
-			for (int[] nxt : graph[cur[0]]) {
-				if (sdt[nxt[0]] > cur[1] + nxt[1]) {
-					sdt[nxt[0]] = cur[1] + nxt[1];
-					pq.offer(new int[] { nxt[0], sdt[nxt[0]] });
+			for (Edge nxt : graph[cur.vertex]) {
+				if (sdt[nxt.vertex] > cur.value + nxt.value) {
+					sdt[nxt.vertex] = cur.value + nxt.value;
+					pq.offer(new Edge(nxt.vertex, sdt[nxt.vertex]));
 				}
 			}
 		}
@@ -44,5 +44,22 @@ public class Main {
 			sb.append(sdt[i] == Integer.MAX_VALUE ? "INF" : sdt[i]).append("\n");
 		}
 		System.out.print(sb);
+	}
+
+	static class Edge implements Comparable<Edge> {
+		int vertex, value;
+
+		Edge(int vertex, int value) {
+			this.vertex = vertex;
+			this.value = value;
+		}
+
+		@Override
+		public int compareTo(Edge e) {
+			if (this.value > e.value)
+				return 1;
+			else
+				return -1;
+		}
 	}
 }
