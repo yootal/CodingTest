@@ -10,11 +10,16 @@ public class Solution {
 		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
 		Buger[] buger = new Buger[20];
+		int[][] dp = new int[21][10001];
 		for (int tc = 1; tc <= T; tc++) {
 			st = new StringTokenizer(br.readLine());
 			int N = Integer.parseInt(st.nextToken());
 			int L = Integer.parseInt(st.nextToken());
-			int[][] dp = new int[N + 1][L + 1];
+			for (int i = 0; i <= N; i++) {
+				for (int j = 0; j <= L; j++) {
+					dp[i][j] = 0;
+				}
+			}
 			for (int i = 0; i < N; i++) {
 				st = new StringTokenizer(br.readLine(), " ");
 				int score = Integer.parseInt(st.nextToken());
