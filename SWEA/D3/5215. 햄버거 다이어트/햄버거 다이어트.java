@@ -9,12 +9,12 @@ public class Solution {
 		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
+		Buger[] buger = new Buger[20];
 		for (int tc = 1; tc <= T; tc++) {
 			st = new StringTokenizer(br.readLine());
 			int N = Integer.parseInt(st.nextToken());
 			int L = Integer.parseInt(st.nextToken());
 			int[][] dp = new int[N + 1][L + 1];
-			Buger[] buger = new Buger[N];
 			for (int i = 0; i < N; i++) {
 				st = new StringTokenizer(br.readLine(), " ");
 				int score = Integer.parseInt(st.nextToken());
