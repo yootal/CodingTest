@@ -9,12 +9,14 @@ public class Solution {
 		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
+		int N;
+		int L;
 		Buger[] buger = new Buger[20];
 		int[][] dp = new int[21][10001];
 		for (int tc = 1; tc <= T; tc++) {
 			st = new StringTokenizer(br.readLine());
-			int N = Integer.parseInt(st.nextToken());
-			int L = Integer.parseInt(st.nextToken());
+			N = Integer.parseInt(st.nextToken());
+			L = Integer.parseInt(st.nextToken());
 			for (int i = 0; i <= N; i++) {
 				for (int j = 0; j <= L; j++) {
 					dp[i][j] = 0;
@@ -22,9 +24,7 @@ public class Solution {
 			}
 			for (int i = 0; i < N; i++) {
 				st = new StringTokenizer(br.readLine(), " ");
-				int score = Integer.parseInt(st.nextToken());
-				int calorie = Integer.parseInt(st.nextToken());
-				buger[i] = new Buger(score, calorie);
+				buger[i] = new Buger(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 			}
 			for (int i = 1; i <= N; i++) {
 				Buger cur = buger[i - 1];
