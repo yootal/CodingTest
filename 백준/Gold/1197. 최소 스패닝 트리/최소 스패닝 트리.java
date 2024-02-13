@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+	static int[] parent;
 
 	public static void main(String[] args) throws Exception {
 		//System.setIn(new FileInputStream("res/input.txt"));
@@ -9,47 +10,57 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
-		ArrayList<Node>[] graph = new ArrayList[n + 1];
-		for (int i = 0; i <= n; i++) {
-			graph[i] = new ArrayList<>();
-		}
+		PriorityQueue<Edge> pq = new PriorityQueue<>();
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine(), " ");
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			int v = Integer.parseInt(st.nextToken());
-			graph[a].add(new Node(b, v));
-			graph[b].add(new Node(a, v));
+			pq.offer(new Edge(a, b, v));
 		}
-		boolean[] vis = new boolean[n + 1];
-		PriorityQueue<Node> pq = new PriorityQueue<>();
-		pq.offer(new Node(1, 0));
+		parent = new int[n + 1];
+		for (int i = 1; i <= n; i++) {
+			parent[i] = i;
+		}
 		int ans = 0;
 		while (!pq.isEmpty()) {
-			Node cur = pq.poll();
-			if (vis[cur.nxt])
-				continue;
-			vis[cur.nxt] = true;
-			ans += cur.value;
-			for (Node nxt : graph[cur.nxt]) {
-				if (!vis[nxt.nxt])
-					pq.offer(nxt);
+			Edge cur = pq.poll();
+			if (union(cur.a, cur.b)) {
+				ans += cur.value;
 			}
 		}
 		System.out.println(ans);
 	}
 
-	static class Node implements Comparable<Node> {
-		int nxt, value;
+	static class Edge implements Comparable<Edge> {
+		int a, b, value;
 
-		public Node(int nxt, int value) {
-			this.nxt = nxt;
+		public Edge(int a, int b, int value) {
+			this.a = a;
+			this.b = b;
 			this.value = value;
 		}
 
 		@Override
-		public int compareTo(Node o) {
+		public int compareTo(Edge o) {
 			return value - o.value;
+		}
+	}
+
+	static int find(int x) {
+		if (x != parent[x])
+			parent[x] = find(parent[x]);
+		return parent[x];
+	}
+
+	static boolean union(int x, int y) {
+		x = find(x);
+		y = find(y);
+		if (x == y) {
+			return false;
+		} else {
+			parent[y] = x;
+			return true;
 		}
 	}
 }
