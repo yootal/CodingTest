@@ -23,10 +23,12 @@ public class Main {
 			parent[i] = i;
 		}
 		int ans = 0;
-		while (!pq.isEmpty()) {
+		int useCnt = 0;
+		while (useCnt < n - 1) {
 			Edge cur = pq.poll();
 			if (union(cur.a, cur.b)) {
 				ans += cur.value;
+				useCnt++;
 			}
 		}
 		System.out.println(ans);
