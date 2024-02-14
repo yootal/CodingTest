@@ -8,14 +8,17 @@ public class Solution {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer stt;
 		StringBuilder sb = new StringBuilder();
-		int T = Integer.parseInt(br.readLine().trim());
-		long[] candyCnt = new long[101];
+		int T = Integer.parseInt(br.readLine());
+		int N;
+		long M;
+		long maxCnt;
+		long[] candyCnt = new long[100];
 		for (int tc = 1; tc <= T; tc++) {
 			stt = new StringTokenizer(br.readLine());
-			int N = Integer.parseInt(stt.nextToken());
-			long M = Long.parseLong(stt.nextToken());
+			N = Integer.parseInt(stt.nextToken());
+			M = Long.parseLong(stt.nextToken());
 			stt = new StringTokenizer(br.readLine());
-			long maxCnt = 0;
+			maxCnt = 0;
 			for (int i = 0; i < N; i++) {
 				candyCnt[i] = Long.parseLong(stt.nextToken());
 				maxCnt = Math.max(candyCnt[i], maxCnt);
