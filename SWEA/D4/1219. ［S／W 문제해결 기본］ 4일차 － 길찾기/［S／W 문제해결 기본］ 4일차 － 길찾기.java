@@ -3,7 +3,8 @@ import java.util.*;
 
 public class Solution {
 	static int N, M, ans;
-	static ArrayList<Integer>[] graph;
+	static Node[] graph;
+	static boolean[] vis;
 
 	public static void main(String[] args) throws Exception {
 		//System.setIn(new FileInputStream("res/input.txt"));
@@ -14,13 +15,13 @@ public class Solution {
 			st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
 			M = Integer.parseInt(st.nextToken());
-			graph = new ArrayList[100];
-			for (int i = 0; i < 100; i++) {
-				graph[i] = new ArrayList<>();
-			}
+			graph = new Node[100];
+			vis = new boolean[100];
 			st = new StringTokenizer(br.readLine());
 			for (int i = 0; i < M; i++) {
-				graph[Integer.parseInt(st.nextToken())].add(Integer.parseInt(st.nextToken()));
+				int a = Integer.parseInt(st.nextToken());
+				int b = Integer.parseInt(st.nextToken());
+				graph[a] = new Node(b, graph[a]);
 			}
 			ans = 0;
 			dfs(0);
@@ -29,13 +30,31 @@ public class Solution {
 		System.out.print(sb);
 	}
 
-	static void dfs(int cur) {
-		if (cur == 99 || ans == 1) {
+	static void dfs(int i) {
+		if (i == 99 || ans == 1) {
 			ans = 1;
 			return;
 		}
-		for (int nxt : graph[cur]) {
-			dfs(nxt);
+		vis[i] = true;
+		for (Node j = graph[i]; j != null; j = j.link) {
+			if (!vis[j.vertex]) {
+				dfs(j.vertex);
+			}
 		}
+	}
+
+	static class Node {
+		int vertex;
+		Node link;
+
+		public Node(int vertex, Node link) {
+			this.vertex = vertex;
+			this.link = link;
+		}
+
+		public Node(int vertex) {
+			this.vertex = vertex;
+		}
+
 	}
 }
