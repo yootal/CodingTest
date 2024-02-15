@@ -24,7 +24,8 @@ public class Solution {
 				String row = br.readLine();
 				for (int j = 0; j < M; j++) {
 					map[i][j] = row.charAt(j);
-					if (tank_check.contains(row.substring(j, j + 1))) {
+					if (tank == null
+							&& (map[i][j] == '^' || map[i][j] == 'v' || map[i][j] == '<' || map[i][j] == '>')) {
 						tank = new Tank(i, j, direction(map[i][j]));
 						map[i][j] = '.';
 					}
@@ -43,6 +44,7 @@ public class Solution {
 				}
 				sb.append("\n");
 			}
+			tank = null;
 		}
 		System.out.print(sb);
 	}
