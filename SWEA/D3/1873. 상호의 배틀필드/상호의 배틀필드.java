@@ -15,18 +15,20 @@ public class Solution {
 		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
+		map = new char[20][20];
+		tank = new Tank(-1, -1, -1);
 		for (int tc = 1; tc <= T; tc++) {
 			st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
 			M = Integer.parseInt(st.nextToken());
-			map = new char[N][M];
 			for (int i = 0; i < N; i++) {
 				String row = br.readLine();
 				for (int j = 0; j < M; j++) {
 					map[i][j] = row.charAt(j);
-					if (tank == null
-							&& (map[i][j] == '^' || map[i][j] == 'v' || map[i][j] == '<' || map[i][j] == '>')) {
-						tank = new Tank(i, j, direction(map[i][j]));
+					if (map[i][j] == '^' || map[i][j] == 'v' || map[i][j] == '<' || map[i][j] == '>') {
+						tank.x = i;
+						tank.y = j;
+						tank.d = direction(map[i][j]);
 						map[i][j] = '.';
 					}
 				}
@@ -38,13 +40,12 @@ public class Solution {
 			}
 			map[tank.x][tank.y] = tank_check.charAt(tank.d);
 			sb.append("#").append(tc).append(" ");
-			for (char[] row : map) {
-				for (char c : row) {
-					sb.append(c);
+			for (int i = 0; i < N; i++) {
+				for (int j = 0; j < M; j++) {
+					sb.append(map[i][j]);
 				}
 				sb.append("\n");
 			}
-			tank = null;
 		}
 		System.out.print(sb);
 	}
