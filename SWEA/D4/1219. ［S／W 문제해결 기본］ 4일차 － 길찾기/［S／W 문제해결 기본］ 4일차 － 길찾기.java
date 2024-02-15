@@ -3,7 +3,6 @@ import java.util.*;
 
 public class Solution {
 	static int N, M, ans;
-	static String inp;
 	static ArrayList<Integer>[] graph;
 
 	public static void main(String[] args) throws Exception {
@@ -31,7 +30,7 @@ public class Solution {
 	}
 
 	static void dfs(int cur) {
-		if (cur == 99) {
+		if (cur == 99 || ans == 1) {
 			ans = 1;
 			return;
 		}
@@ -39,5 +38,4 @@ public class Solution {
 			dfs(nxt);
 		}
 	}
-
 }
