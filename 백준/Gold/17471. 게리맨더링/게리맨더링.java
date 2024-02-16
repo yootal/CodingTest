@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static int N, R, cnt[], ans = Integer.MAX_VALUE;
+	static int N, R, ans = Integer.MAX_VALUE, cnt[];
 	static int[] group;
 	static int[] group2;
 	static boolean[] visited;
@@ -45,13 +45,10 @@ public class Main {
 	static void comb(int count, int idx) {
 		if (count == R) {
 			int j = 0;
-//			System.out.println(Arrays.toString(visited));
 			for (int i = 1; i <= N; i++) {
 				if (!visited[i])
 					group2[j++] = i;
 			}
-//			System.out.println(Arrays.toString(group));
-//			System.out.println(Arrays.toString(group2));
 			if (link_check(group[0], group) && link_check(group2[0], group2)) {
 				int sum1 = 0;
 				int sum2 = 0;
