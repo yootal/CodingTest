@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
+	static int N, arr[][], vis[], upCnt, downCnt, num;
 
 	public static void main(String[] args) throws Exception {
 		//System.setIn(new FileInputStream("res/input.txt"));
@@ -10,36 +11,28 @@ public class Solution {
 		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
-			int N = Integer.parseInt(br.readLine());
+			N = Integer.parseInt(br.readLine());
+			arr = new int[N + 1][N + 1]; // 인접 행렬에 기록
+			vis = new int[N + 1]; // 카운팅 한 번만 하기 위한 방문 배열
 			int M = Integer.parseInt(br.readLine());
-			boolean[][] arr = new boolean[N + 1][N + 1]; // 인접 행렬에 기록
 			for (int i = 0; i < M; i++) {
 				st = new StringTokenizer(br.readLine());
 				// a < b
 				int a = Integer.parseInt(st.nextToken());
 				int b = Integer.parseInt(st.nextToken());
-				arr[a][b] = true; // 연결 표시
-			}
-			
-			// i -> k, k -> j 가 연결 상태면 i -> j 가능 
-			for (int k = 1; k <= N; k++) {
-				for (int i = 1; i <= N; i++) {
-					for (int j = 1; j <= N; j++) {
-						if (arr[i][k] && arr[k][j]) {
-							arr[i][j] = true;
-						}
-					}
-				}
+				arr[a][b] = 1; // 연결 표시
 			}
 			int ans = 0;
 			for (int i = 1; i <= N; i++) {
-				int cnt = 0;
-				for (int j = 1; j <= N; j++) {
-					// 연결된 수가 N-1이면 답 + 1
-					if (arr[i][j] || arr[j][i])
-						cnt++;
-				}
-				if (cnt == N - 1)
+				upCnt = 0;
+				downCnt = 0;
+				// 방문 배열 초기화 안해도 괜찮
+				num = i;
+				countUp(i);
+				num = -i;
+				countDown(i);
+				// N-1 -> 몇명보다 크고 작은지 다 셀 수 있으면 답 + 1
+				if (upCnt + downCnt == N - 1)
 					ans++;
 			}
 			sb.append("#").append(tc).append(" ").append(ans).append("\n");
@@ -47,4 +40,29 @@ public class Solution {
 		System.out.print(sb);
 	}
 
+	static void countUp(int x) { // DFS
+		vis[x] = num;
+		for (int i = 1; i <= N; i++) {
+			if (vis[i] != num && arr[x][i] == 1) {
+				countUp(i);
+				upCnt++;
+			}
+		}
+	}
+
+	static void countDown(int x) { // BFS
+		vis[x] = num;
+		Queue<Integer> q = new ArrayDeque<>();
+		q.offer(x);
+		while (!q.isEmpty()) {
+			int cur = q.poll();
+			for (int i = 1; i <= N; i++) {
+				if (vis[i] != num && arr[i][cur] == 1) {
+					vis[i] = num;
+					q.offer(i);
+					downCnt++;
+				}
+			}
+		}
+	}
 }
