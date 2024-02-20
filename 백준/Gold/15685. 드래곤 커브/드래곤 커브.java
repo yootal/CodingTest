@@ -5,7 +5,7 @@ public class Main {
 	static final int[] dx = { 0, -1, 0, 1 };
 	static final int[] dy = { 1, 0, -1, 0 };
 	static int N;
-	static int[] record = new int[1024];
+	static int[] record = new int[512];
 	static boolean[][] board;
 	static ArrayDeque<Integer> dq;
 
