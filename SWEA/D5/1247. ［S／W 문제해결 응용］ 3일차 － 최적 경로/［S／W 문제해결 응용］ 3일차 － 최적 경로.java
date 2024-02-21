@@ -3,6 +3,7 @@ import java.util.*;
 
 public class Solution {
 	static int N, ans;
+	static boolean v[];
 	static Point start, end, points[];
 
 	public static void main(String[] args) throws Exception {
@@ -14,6 +15,7 @@ public class Solution {
 		for (int tc = 1; tc <= T; tc++) {
 			N = Integer.parseInt(br.readLine());
 			points = new Point[N];
+			v = new boolean[N];
 			ans = Integer.MAX_VALUE;
 			st = new StringTokenizer(br.readLine());
 			start = new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
@@ -21,22 +23,24 @@ public class Solution {
 			for (int i = 0; i < N; i++) {
 				points[i] = new Point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
 			}
-			dfs(0, 0, start, 0);
+			dfs(0, start, 0);
 			sb.append("#").append(tc).append(" ").append(ans).append("\n");
 		}
 		System.out.print(sb);
 	}
 
-	static void dfs(int vis, int total, Point last, int cnt) {
+	static void dfs(int total, Point last, int cnt) {
 		if (total > ans)
 			return;
-		if (vis == (1 << N) - 1) {
+		if (cnt == N) {
 			ans = Math.min(ans, total + calcDist(last, end));
 			return;
 		}
 		for (int i = 0; i < N; i++) {
-			if ((vis & (1 << i)) == 0) {
-				dfs(vis | (1 << i), total + calcDist(last, points[i]), points[i], cnt + 1);
+			if (!v[i]) {
+				v[i] = true;
+				dfs(total + calcDist(last, points[i]), points[i], cnt + 1);
+				v[i] = false;
 			}
 		}
 	}
