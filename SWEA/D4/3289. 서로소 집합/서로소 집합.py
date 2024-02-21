@@ -1,33 +1,55 @@
-def find(x):
-    if x != parent[x]:
-        return find(parent[x])
-    return x
+import java.io.*;
+import java.util.*;
 
+public class Solution {
+	static int parent[];
 
-def union(x, y):
-    x = find(x)
-    y = find(y)
-    if x == y:
-        return
-    if x > y:
-        parent[x] = y
-    else:
-        parent[y] = x
-    return
+	public static void main(String[] args) throws Exception {
+		//System.setIn(new FileInputStream("res/input.txt"));
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int T = Integer.parseInt(br.readLine());
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		for (int tc = 1; tc <= T; tc++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			int N = Integer.parseInt(st.nextToken());
+			int M = Integer.parseInt(st.nextToken());
+			parent = new int[N + 1];
+			for (int i = 1; i <= N; i++) {
+				parent[i] = i;
+			}
+			sb.append("#").append(tc).append(" ");
+			for (int i = 0; i < M; i++) {
+				st = new StringTokenizer(br.readLine());
+				int c = Integer.parseInt(st.nextToken());
+				int a = Integer.parseInt(st.nextToken());
+				int b = Integer.parseInt(st.nextToken());
+				if (c == 0) {
+					union(a, b);
+				} else {
+					if (find(a) == find(b))
+						sb.append(1);
+					else
+						sb.append(0);
+				}
+			}
+			sb.append("\n");
+		}
+		System.out.print(sb);
+	}
 
+	static int find(int x) {
+		if (x != parent[x]) {
+			parent[x] = find(parent[x]);
+		}
+		return parent[x];
+	}
 
-t = int(input())
-for case in range(1, t + 1):
-    n, m = map(int, input().split())
-    parent = list(range(n + 1))
-    ans = ''
-    for _ in range(m):
-        c, a, b = map(int, input().split())
-        if c == 0:
-            union(a, b)
-        else:
-            if find(a) == find(b):
-                ans += '1'
-            else:
-                ans += '0'
-    print(f'#{case} {ans}')
+	static void union(int x, int y) {
+		x = find(x);
+		y = find(y);
+		if (x != y) {
+			parent[y] = x;
+		}
+	}
+}
