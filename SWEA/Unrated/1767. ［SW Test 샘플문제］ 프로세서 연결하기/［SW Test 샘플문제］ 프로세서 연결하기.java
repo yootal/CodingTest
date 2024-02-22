@@ -5,6 +5,7 @@ public class Solution {
 	static final int[] dx = { -1, 0, 1, 0 };
 	static final int[] dy = { 0, 1, 0, -1 };
 	static int N, maxCnt, ans;
+	static int selectedCore[];
 	static int board[][];
 	static ArrayList<Core> core;
 
@@ -24,13 +25,18 @@ public class Solution {
 					board[i][j] = Integer.parseInt(st.nextToken());
 					if (board[i][j] == 1) {
 						if (i > 0 && i < N - 1 && j > 0 && j < N - 1)
-							core.add(new Core(i, j, false));
+							core.add(new Core(i, j));
 					}
 				}
 			}
-			maxCnt = 0;
 			ans = Integer.MAX_VALUE;
-			solve(0);
+			for (int i = core.size(); i > -1; i--) {
+				maxCnt = i;
+				selectedCore = new int[maxCnt];
+				comb(0, 0);
+				if (ans != Integer.MAX_VALUE)
+					break;
+			}
 			sb.append("#").append(tc).append(" ").append(ans).append("\n");
 		}
 		System.out.print(sb);
@@ -38,42 +44,37 @@ public class Solution {
 
 	static class Core {
 		int x, y;
-		boolean power;
 
-		public Core(int x, int y, boolean power) {
+		public Core(int x, int y) {
 			this.x = x;
 			this.y = y;
-			this.power = power;
 		}
 
 	}
 
-	static void solve(int cnt) {
-		if (cnt == core.size()) {
-			int onCnt = 0;
-			for (Core c : core) {
-				if (c.power)
-					onCnt++;
-			}
-			if (maxCnt < onCnt) {
-				maxCnt = onCnt;
-				ans = Integer.MAX_VALUE;
-			}
-			if (maxCnt == onCnt) {
-				ans = Math.min(ans, countLink());
-			}
+	static void comb(int cnt, int idx) {
+		if (cnt == maxCnt) {
+			solve(0);
 			return;
 		}
-		Core cur = core.get(cnt);
+		for (int i = idx; i < core.size(); i++) {
+			selectedCore[cnt] = i;
+			comb(cnt + 1, i + 1);
+		}
+	}
+
+	static void solve(int cnt) {
+		if (cnt == maxCnt) {
+			ans = Math.min(ans, countLink());
+			return;
+		}
+		Core cur = core.get(selectedCore[cnt]);
 		for (int d = 0; d < 4; d++) {
 			if (link(cur.x, cur.y, d, cnt + 1)) {
-				cur.power = true;
 				solve(cnt + 1);
 				clear(cur.x, cur.y, d, cnt + 1);
-				cur.power = false;
 			} else {
 				clear(cur.x, cur.y, d, cnt + 1);
-				solve(cnt + 1);
 			}
 		}
 	}
