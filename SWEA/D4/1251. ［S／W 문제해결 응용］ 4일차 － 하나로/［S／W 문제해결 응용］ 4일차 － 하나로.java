@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Solution {
 	static double e;
-	static int[] parent; // 크루스칼(유니온 + 파인드)에 사용할 부모 저장 배열
+	static int[] parent;
 
 	public static void main(String[] args) throws Exception {
 		//System.setIn(new FileInputStream("res/input.txt"));
@@ -64,9 +64,8 @@ public class Solution {
 	static boolean union(int x, int y) {
 		x = find(x);
 		y = find(y);
-		if (x == y) {
+		if (x == y)
 			return false;
-		}
 		parent[y] = x;
 		return true;
 	}
@@ -88,8 +87,8 @@ public class Solution {
 
 	}
 
+	// 정점 클래스
 	static class Point {
 		int x, y;
-
 	}
 }
