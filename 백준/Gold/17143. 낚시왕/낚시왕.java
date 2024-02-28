@@ -16,12 +16,6 @@ public class Main {
 			this.d = d;
 			this.z = z;
 		}
-
-		@Override
-		public String toString() {
-			return String.format("%d %d", z, d);
-		}
-
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -76,7 +70,6 @@ public class Main {
 
 	static void sharkMove() {
 		Shark[][] afterMove = new Shark[N][M];
-
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
 				if (sharkInfo[i][j] != null) {
@@ -103,7 +96,6 @@ public class Main {
 							ty += dy[td];
 						}
 					}
-//					System.out.println(tx + " "+ty);
 					if (afterMove[tx][ty] == null) {
 						afterMove[tx][ty] = new Shark(cur.s, td, cur.z);
 					} else {
@@ -115,9 +107,6 @@ public class Main {
 				}
 			}
 		}
-//		for (Shark[] row : afterMove) {
-//			System.out.println(Arrays.toString(row));
-//		}
 		sharkInfo = afterMove;
 	}
 }
