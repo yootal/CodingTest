@@ -5,6 +5,8 @@ public class Main {
 	static final int[] dx = { -1, 0, 1, 0 };
 	static final int[] dy = { 0, 1, 0, -1 };
 	static char[][] state;
+	static ArrayList<int[]> popList;
+	static Queue<int[]> q;
 	static boolean[][] v;
 
 	public static void main(String[] args) throws Exception {
@@ -17,6 +19,8 @@ public class Main {
 				state[i][j] = row.charAt(j);
 			}
 		}
+		popList = new ArrayList<int[]>();
+		q = new ArrayDeque<>();
 		int cnt = 0;
 		while (true) {
 			if (!bfs())
@@ -28,17 +32,16 @@ public class Main {
 
 	static boolean bfs() {
 		v = new boolean[12][6];
-		ArrayList<int[]> popList = new ArrayList<int[]>();
+		boolean flag = false;
 		for (int i = 11; i >= 0; i--) {
 			for (int j = 0; j < 6; j++) {
 				if (state[i][j] != '.' && !v[i][j]) {
-					Queue<int[]> q = new ArrayDeque<>();
 					v[i][j] = true;
-					ArrayList<int[]> al = new ArrayList<int[]>();
+					popList.clear();
 					q.offer(new int[] { i, j });
 					while (!q.isEmpty()) {
 						int[] cur = q.poll();
-						al.add(new int[] { cur[0], cur[1] });
+						popList.add(new int[] { cur[0], cur[1] });
 						for (int d = 0; d < 4; d++) {
 							int nx = cur[0] + dx[d];
 							int ny = cur[1] + dy[d];
@@ -49,43 +52,36 @@ public class Main {
 							}
 						}
 					}
-					if (al.size() > 3) {
-						popList.addAll(al);
+					if (popList.size() > 3) {
+						flag = true;
+						for (int[] p : popList) {
+							state[p[0]][p[1]] = '.';
+						}
 					}
 				}
 			}
 		}
-		if (!popList.isEmpty()) {
-			erase(popList);
+		if (flag) {
+			erase();
 			return true;
 		} else
 			return false;
 
 	}
 
-	static void erase(ArrayList<int[]> popList) {
-		for (int[] p : popList) {
-			state[p[0]][p[1]] = '.';
-		}
-
+	static void erase() {
 		for (int j = 0; j < 6; j++) {
 			for (int i = 11; i >= 0; i--) {
 				if (state[i][j] != '.')
 					continue;
-				int k = i - 1;
-				while (k >= 0 && state[k][j] == '.') {
-					k--;
+				for (int k = i - 1; k >= 0; k--) {
+					if (state[k][j] != '.') {
+						state[i][j] = state[k][j];
+						state[k][j] = '.';
+						break;
+					}
 				}
-				if (k == -1)
-					break;
-				swap(j, i, k);
 			}
 		}
-	}
-
-	static void swap(int col, int x1, int x2) {
-		char temp = state[x1][col];
-		state[x1][col] = state[x2][col];
-		state[x2][col] = temp;
 	}
 }
