@@ -10,7 +10,7 @@ public class Solution {
 	static Point[] stairsPoint;
 
 	static class Point {
-		int x, y, t;
+		int x, y, t, pos;
 
 		public Point(int x, int y) {
 			this.x = x;
@@ -84,6 +84,7 @@ public class Solution {
 			v = new boolean[points.size()];
 			for (int i = 0; i < points.size(); i++) {
 				points.get(i).t = times[where[i]][i];
+				
 			}
 			int checkCnt = 0;
 			int time = 0;
@@ -96,6 +97,10 @@ public class Solution {
 				}
 				while (!stairs1.isEmpty() && stairs1.peek().t == stairsPoint[0].t) {
 					stairs1.poll();
+					checkCnt++;
+				}
+				while (!stairs2.isEmpty() && stairs2.peek().t == stairsPoint[1].t) {
+					stairs2.poll();
 					checkCnt++;
 				}
 				while (!stairs2.isEmpty() && stairs2.peek().t == stairsPoint[1].t) {
