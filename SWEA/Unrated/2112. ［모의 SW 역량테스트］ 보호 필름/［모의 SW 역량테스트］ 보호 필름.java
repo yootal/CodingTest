@@ -55,27 +55,27 @@ public class Solution {
 	}
 
 	static void dfs(int cnt, int idx) {
-		if (cnt >= ans)
+		if (cnt >= ans) // 현재 답보다 cnt가 높아지면 답이 아니다
 			return;
 
-		if (idx == D) {
+		if (idx == D) { // 인덱스 끝까지 다돌고 최소값 확인
 			if (check()) {
 				ans = Math.min(ans, cnt);
 			}
 			return;
 		}
 
-		dfs(cnt, idx + 1);
+		dfs(cnt, idx + 1); // 안 바꾼 상태
 
 		for (int i = 0; i < W; i++)
 			film[idx][i] = 1;
-		dfs(cnt + 1, idx + 1);
+		dfs(cnt + 1, idx + 1); // idx 번째 줄을 1로 바꾼 상태
 
 		for (int i = 0; i < W; i++)
 			film[idx][i] = 0;
-		dfs(cnt + 1, idx + 1);
+		dfs(cnt + 1, idx + 1); // idx 번째 줄을 0으로 바꾼 상태
 
-		for (int i = 0; i < W; i++)
+		for (int i = 0; i < W; i++) // 바꿨던 배열 되돌리기
 			film[idx][i] = temp[idx][i];
 
 	}
