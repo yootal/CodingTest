@@ -4,7 +4,7 @@ import java.util.*;
 public class Solution {
 	static final int[] dx = { -1, 0, 1, 0 };
 	static final int[] dy = { 0, 1, 0, -1 };
-	static int N;
+	static int N, record[][][];
 	static Micro board[][];
 
 	static class Micro {
@@ -23,6 +23,7 @@ public class Solution {
 		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
 		int T = Integer.parseInt(br.readLine());
+		record = new int[100][100][2];
 		for (int tc = 1; tc <= T; tc++) {
 			st = new StringTokenizer(br.readLine());
 			N = Integer.parseInt(st.nextToken());
@@ -68,7 +69,6 @@ public class Solution {
 
 	static void move() {
 		Micro[][] board2 = new Micro[N][N];
-		int[][][] record = new int[N][N][2];
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
 				if (board[i][j] != null) {
