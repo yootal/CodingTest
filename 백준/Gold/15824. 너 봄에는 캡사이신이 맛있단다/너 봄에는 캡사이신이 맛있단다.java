@@ -4,6 +4,7 @@ import java.util.*;
 public class Main {
 	static final long mod = 1000000007;
 	static long[] score;
+	static long[] gap;
 	static long ans;
 
 	public static void main(String[] args) throws Exception {
@@ -15,24 +16,17 @@ public class Main {
 		for (int i = 0; i < n; i++) {
 			score[i] = Long.parseLong(st.nextToken());
 		}
+		gap = new long[n];
+		gap[0] = 1;
+		for (int i = 0; i < n - 1; i++) {
+			gap[i + 1] = (gap[i] * 2) % mod;
+		}
 		Arrays.sort(score);
 		ans = 0;
 		for (int i = 0; i < n; i++) {
-			ans += (score[i] % mod) * ((getGap(i) - getGap(n - i - 1)) % mod);
+			ans += (score[i]) * (gap[i] - gap[n - i - 1]);
 			ans %= mod;
 		}
 		System.out.println(ans);
-	}
-
-	static long getGap(int n) {
-		if (n == 0)
-			return 1;
-		if (n == 1)
-			return 2;
-		long half = getGap(n / 2);
-		if (n % 2 == 1)
-			return half * half * 2 % mod;
-		else
-			return half * half % mod;
 	}
 }
