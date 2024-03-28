@@ -1,41 +1,42 @@
 import sys
 input = sys.stdin.readline
 
-def path(i,j):
-    if nxt[i][j] == 0:
-        return []
-    m = nxt[i][j]
-    return path(i,m) + [m] + path(m,j)
-
 n = int(input())
 m = int(input())
-graph = [[sys.maxsize] * (n+1) for _ in range(n+1)]
+inf = sys.maxsize
+graph = [[inf] * (n+1) for _ in range(n+1)]
 nxt = [[0] * (n+1) for _ in range(n+1)]
 
 for _ in range(m):
-    s,e,c = map(int,input().split())
-    graph[s][e] = min(graph[s][e],c)
-
+    a,b,c = map(int,input().split())
+    if graph[a][b] > c:
+        graph[a][b] = c
+    nxt[a][b] = b
+    
 for i in range(1,n+1):
     graph[i][i] = 0
 
-for k in range(1,n+1):
-    for i in range(1,n+1):
-        for j in range(1,n+1):
+for k in range(1,n+1): 
+    for i in range(1,n+1): 
+        for j in range(1,n+1): 
             if graph[i][j] > graph[i][k] + graph[k][j]:
                 graph[i][j] = graph[i][k] + graph[k][j]
-                nxt[i][j] = k
-            
-for i in range(1,n+1):
-    for j in range(1,n+1):
-        print(graph[i][j] if graph[i][j] != sys.maxsize else 0, end = " ")
+                nxt[i][j] = nxt[i][k]
+
+for row in graph[1:]:
+    for col in row[1:]:
+        print(col if col != inf else 0,end=" ")
     print()
-    
+
 for i in range(1,n+1):
     for j in range(1,n+1):
-        if graph[i][j] in [0,sys.maxsize]:
+        if graph[i][j] in (0,inf):
             print(0)
             continue
-        ans = [i] + path(i,j) + [j]
-        print(len(ans), end = " ")
-        print(*ans)
+        path = []
+        st = i
+        while st != j:
+            path.append(st)
+            st = nxt[st][j]
+        path.append(j)
+        print(len(path),*path)
