@@ -9,39 +9,35 @@ public class Solution {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
 		StringBuilder sb = new StringBuilder();
+		long[] facto = new long[1000001];
+		facto[0] = 1;
+		for (int i = 1; i < 1000001; i++) {
+			facto[i] = facto[i - 1] * i % mod;
+		}
 		int T = Integer.parseInt(br.readLine());
 		for (int tc = 1; tc <= T; tc++) {
 			st = new StringTokenizer(br.readLine());
-			long N = Long.parseLong(st.nextToken());
-			long R = Long.parseLong(st.nextToken());
-			long top = factorial(N);
-			long bottom = (factorial(N - R) % mod) * (factorial(R) % mod) % mod;
-			sb.append("#").append(tc + " ").append((top % mod) * (modDivision(bottom, mod - 2) % mod) % mod)
-					.append("\n");
+			int N = Integer.parseInt(st.nextToken());
+			int R = Integer.parseInt(st.nextToken());
+			long top = facto[N];
+			long bottom = facto[N - R] * facto[R] % mod;
+			sb.append("#").append(tc + " ").append(top * power(bottom, mod - 2) % mod).append("\n");
 		}
 		System.out.print(sb);
 	}
 
-	static long factorial(long num) {
-		long n = 1;
-		for (int i = 2; i <= num; i++) {
-			n *= i;
+	static long power(long n, long k) { // N^K
+		long res = 1L;
+		n %= mod;
+		while (k > 0) {
+			if (k % 2 == 1) {
+				res *= n;
+				res %= mod;
+			}
+			k >>= 1;
+			n *= n;
 			n %= mod;
 		}
-		return n;
-	}
-
-	static long modDivision(long n, long r) {
-		if (r == 0)
-			return 1;
-		else if (r == 1) {
-			return n;
-		}
-		long temp = modDivision(n, r / 2);
-		if (r % 2 == 1) {
-			return ((temp * temp % mod) * n % mod) % mod;
-		} else {
-			return temp * temp % mod;
-		}
+		return res;
 	}
 }
