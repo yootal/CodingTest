@@ -3,7 +3,6 @@ import java.util.*;
 class Solution {
     public static int[] solution(String[] gems) {
         int n = gems.length;
-        int vis[] = new int[n];
         HashMap<String, Integer> map = new HashMap<>();
         
         int idx = 0;
@@ -16,6 +15,7 @@ class Solution {
         int range = Integer.MAX_VALUE;
         int ans[] = new int[2];
         int limit = map.size();
+        int vis[] = new int[limit];
         int size = 0;
         int end = 0;
         for(int start = 0 ; start < n ; start++){
