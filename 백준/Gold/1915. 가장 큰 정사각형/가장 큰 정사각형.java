@@ -14,7 +14,7 @@ public class Main {
 		for (int i = 0; i < n; i++) {
 			String row = br.readLine();
 			for (int j = 0; j < m; j++) {
-				dp[i][j] = Integer.parseInt(String.valueOf(row.charAt(j)));
+				dp[i][j] = (int) row.charAt(j) - '0';
 				if (dp[i][j] == 1 && j > 0 && i > 0) {
 					dp[i][j] = Math.min(dp[i - 1][j - 1], Math.min(dp[i - 1][j], dp[i][j - 1])) + dp[i][j];
 				}
