@@ -2,14 +2,18 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-	static class Mountain {
-		int minX, maxX, cnt;
-		boolean inCheck;
+	static class Mountain implements Comparable<Mountain> {
+		int minX, maxX;
 
 		public Mountain(int minX, int maxX) {
 			super();
 			this.minX = minX;
 			this.maxX = maxX;
+		}
+
+		@Override
+		public int compareTo(Mountain o) {
+			return Integer.compare(minX, o.minX);
 		}
 	}
 
@@ -40,15 +44,6 @@ class Main {
 				if (!us.isEmpty()) {
 					int lx = us.poll();
 					Mountain temp = new Mountain(Math.min(lx, x), Math.max(lx, x));
-					for (Mountain cur : al) {
-						if (temp.minX > cur.minX && temp.maxX < cur.maxX) {
-							cur.cnt++;
-							temp.inCheck = true;
-						} else if (temp.minX < cur.minX && temp.maxX > cur.maxX) {
-							temp.cnt++;
-							cur.inCheck = true;
-						}
-					}
 					al.add(temp);
 				}
 				// 없으면
@@ -59,28 +54,10 @@ class Main {
 				if ((sy > 0 && ly < 0) && !ds.isEmpty()) {
 					int lx = ds.poll();
 					Mountain temp = new Mountain(Math.min(lx, x), Math.max(lx, x));
-					for (Mountain cur : al) {
-						if (temp.minX > cur.minX && temp.maxX < cur.maxX) {
-							cur.cnt++;
-							temp.inCheck = true;
-						} else if (temp.minX < cur.minX && temp.maxX > cur.maxX) {
-							temp.cnt++;
-							cur.inCheck = true;
-						}
-					}
 					al.add(temp);
 				} else if ((sy < 0 && ly > 0) && !us.isEmpty()) {
 					int lx = us.poll();
 					Mountain temp = new Mountain(Math.min(lx, x), Math.max(lx, x));
-					for (Mountain cur : al) {
-						if (temp.minX > cur.minX && temp.maxX < cur.maxX) {
-							cur.cnt++;
-							temp.inCheck = true;
-						} else if (temp.minX < cur.minX && temp.maxX > cur.maxX) {
-							temp.cnt++;
-							cur.inCheck = true;
-						}
-					}
 					al.add(temp);
 				}
 			}
@@ -90,23 +67,25 @@ class Main {
 			int x1 = us.poll();
 			int x2 = ds.poll();
 			Mountain temp = new Mountain(Math.min(x1, x2), Math.max(x1, x2));
-			for (Mountain cur : al) {
-				if (temp.minX > cur.minX && temp.maxX < cur.maxX) {
-					cur.cnt++;
-					temp.inCheck = true;
-				} else if (temp.minX < cur.minX && temp.maxX > cur.maxX) {
-					temp.cnt++;
-					cur.inCheck = true;
-				}
-			}
 			al.add(temp);
 		}
-		int cnt1 = 0, cnt2 = 0;
-		for (Mountain cur : al) {
-			if (!cur.inCheck)
-				cnt1++;
-			if (cur.cnt == 0)
-				cnt2++;
+		Collections.sort(al);
+		int cnt1 = 0, cnt2 = 1;
+		if (al.size() == 1) {
+			cnt1 = 1;
+		} else {
+			int lx = -Integer.MAX_VALUE;
+			for (int i = 0; i < al.size(); i++) {
+				Mountain cur = al.get(i);
+				if (cur.minX > lx) {
+					cnt1++;
+					lx = cur.maxX;
+				}
+				if (i < al.size() - 1) {
+					if (al.get(i + 1).minX > cur.maxX)
+						cnt2++;
+				}
+			}
 		}
 		System.out.println(cnt1 + " " + cnt2);
 	}
