@@ -1,18 +1,17 @@
 import sys
-from heapq import heappop, heappush
+from heapq import heappush, heappop
 input = sys.stdin.readline
 
-t = int(input())
-for _ in range(t):
-    k = int(input())
-    cp = list(map(int,input().split()))
-    h = []
-    for cp2 in cp:
-        heappush(h,cp2)
+for _ in range(int(input())):
+    hq = []
+    n = int(input())
+    for num in list(map(int,input().split())):
+        heappush(hq,num)
+    
     ans = 0
-    while len(h) != 1:
-        a = heappop(h)
-        b = heappop(h)
-        ans += (a+b)
-        heappush(h,a+b)
+    for _ in range(n-1):
+        combine = heappop(hq) + heappop(hq)
+        ans += combine
+        heappush(hq,combine)
+        
     print(ans)
