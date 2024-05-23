@@ -1,0 +1,1 @@
+x=list(map(int,input().split()));print(min(x[0]//2,x[1]))
