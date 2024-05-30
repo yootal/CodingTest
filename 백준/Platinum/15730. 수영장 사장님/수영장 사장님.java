@@ -2,71 +2,55 @@ import java.io.*;
 import java.util.*;
 
 class Main {
-	static final int dx[] = { -1, 0, 1, 0 };
-	static final int dy[] = { 0, 1, 0, -1 };
-	static int N, M, block[][], vis[][];
 
 	public static void main(String[] args) throws Exception {
+		final int dx[] = { -1, 0, 1, 0 };
+		final int dy[] = { 0, 1, 0, -1 };
 		//System.setIn(new FileInputStream("res/input.txt"));
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		block = new int[N][M];
-		vis = new int[N][M];
-		PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o1[2], o2[2]));
-		for (int i = 0; i < N; i++) {
+		// 테두리 만들고 시작
+		int N = Integer.parseInt(st.nextToken()) + 2;
+		int M = Integer.parseInt(st.nextToken()) + 2;
+		int block[][] = new int[N][M]; // 블록 높이
+		int water[][] = new int[N][M]; // 물 높이
+		boolean vis[][] = new boolean[N][M];
+		for (int i = 1; i < N - 1; i++) {
 			st = new StringTokenizer(br.readLine());
-			for (int j = 0; j < M; j++) {
+			for (int j = 1; j < M - 1; j++) {
 				block[i][j] = Integer.parseInt(st.nextToken());
-				pq.offer(new int[] { i, j, block[i][j] });
 			}
 		}
-		int ans = 0, idx = 1;
+		// 물 높이 초기화
+		for (int i = 0; i < N; i++) Arrays.fill(water[i], Integer.MAX_VALUE);
+		PriorityQueue<int[]> pq = new PriorityQueue<>((o1, o2) -> Integer.compare(o1[2], o2[2]));
+		water[0][0] = 0;
+		pq.offer(new int[] { 0, 0, 0 }); // 테두리 높이 0 시작
 		while (!pq.isEmpty()) {
 			int cur[] = pq.poll();
-			if (cur[2] != block[cur[0]][cur[1]])
-				continue;
-			ans += fill(cur[0], cur[1], idx++);
-		}
-		System.out.println(ans);
-	}
-
-	static int fill(int x, int y, int idx) {
-		vis[x][y] = idx;
-		int h = Integer.MAX_VALUE;
-		ArrayDeque<int[]> q = new ArrayDeque<>();
-		q.offer(new int[] { x, y });
-		while (!q.isEmpty()) {
-			int cur[] = q.poll();
+			if (vis[cur[0]][cur[1]]) break;
+			vis[cur[0]][cur[1]] = true;
 			for (int d = 0; d < 4; d++) {
 				int nx = cur[0] + dx[d];
 				int ny = cur[1] + dy[d];
-				// 나간 경우
-				if (nx < 0 || nx >= N || ny < 0 || ny >= M)
-					return 0;
-				else if (vis[nx][ny] == idx)
-					continue;
-				// 더 낮거나 같은 경우
-				else if (block[nx][ny] <= block[cur[0]][cur[1]]) {
-					vis[nx][ny] = idx;
-					q.offer(new int[] { nx, ny });
-				}
-				// 더 높은 경우 (물이 찰 수 있는 높이)
-				else {
-					h = Math.min(h, block[nx][ny]);
+				if (nx < 0 || nx >= N || ny < 0 || ny >= M) continue;
+				// 1. 현 위치 물 높이와 주변 블록의 높이중 최대값 선택
+				int h = Math.max(water[cur[0]][cur[1]], block[nx][ny]);
+				// 2. 주변의 물 높이보다 h 작으면 갱신
+				// 블록이 더 크면 어차피 계산시 0 나오고
+				// 물 높이가 더 크면 해당 위치의 물 높이 기록 -> 이후 블록 높이 빼서 물 계산
+				if (water[nx][ny] > h) {
+					water[nx][ny] = h;
+					pq.offer(new int[] { nx, ny, h });
 				}
 			}
 		}
-		int total = 0;
+		int ans = 0;
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < M; j++) {
-				if (vis[i][j] == idx) {
-					total += h - block[i][j];
-					block[i][j] = h; // 갱신 해줘야 함
-				}
+				ans += water[i][j] - block[i][j];
 			}
 		}
-		return total;
+		System.out.println(ans);
 	}
 }
