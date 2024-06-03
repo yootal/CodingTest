@@ -6,12 +6,11 @@ class Main {
 	static final int dy[] = { 0, 1, 0, -1 };
 
 	static class Point {
-		int x, y, cnt;
+		int x, y;
 
-		public Point(int x, int y, int cnt) {
+		public Point(int x, int y) {
 			this.x = x;
 			this.y = y;
-			this.cnt = cnt;
 		}
 	}
 
@@ -33,10 +32,10 @@ class Main {
 				board[i][j] = row.charAt(j);
 				switch (board[i][j]) {
 				case 'Y':
-					Y = new Point(i, j, 1);
+					Y = new Point(i, j);
 					break;
 				case 'V':
-					V = new Point(i, j, 1);
+					V = new Point(i, j);
 					break;
 				case 'T':
 					tx = i;
@@ -47,7 +46,7 @@ class Main {
 		}
 		// 해적부터 최단시간 기록
 		ArrayDeque<Point> q = new ArrayDeque<>();
-		visT[V.x][V.y] = V.cnt;
+		visT[V.x][V.y] = 1;
 		q.offer(V);
 		while (!q.isEmpty()) {
 			Point cur = q.poll();
@@ -55,8 +54,8 @@ class Main {
 				int nx = cur.x + dx[d];
 				int ny = cur.y + dy[d];
 				if (nx >= 0 && nx < N && ny >= 0 && ny < M && board[nx][ny] != 'I' && visT[nx][ny] == 0) {
-					visT[nx][ny] = cur.cnt + 1;
-					q.offer(new Point(nx, ny, cur.cnt + 1));
+					visT[nx][ny] = visT[cur.x][cur.y] + 1;
+					q.offer(new Point(nx, ny));
 				}
 			}
 		}
@@ -117,7 +116,7 @@ class Main {
 		// 해적이 바라보는 최단 시간보다 빠를 때만 이동해서 보물찾기
 		boolean ans = false;
 		visT = new int[N][M];
-		visT[Y.x][Y.y] = Y.cnt;
+		visT[Y.x][Y.y] = 1;
 		q.offer(Y);
 		while (!q.isEmpty()) {
 			Point cur = q.poll();
@@ -128,10 +127,10 @@ class Main {
 			for (int d = 0; d < 4; d++) {
 				int nx = cur.x + dx[d];
 				int ny = cur.y + dy[d];
-				if (nx >= 0 && nx < N && ny >= 0 && ny < M && board[nx][ny] != 'I' && minT[nx][ny] > cur.cnt + 1
-						&& visT[nx][ny] == 0) {
-					visT[nx][ny] = cur.cnt + 1;
-					q.offer(new Point(nx, ny, cur.cnt + 1));
+				if (nx >= 0 && nx < N && ny >= 0 && ny < M && board[nx][ny] != 'I'
+						&& minT[nx][ny] > visT[cur.x][cur.y] + 1 && visT[nx][ny] == 0) {
+					visT[nx][ny] = visT[cur.x][cur.y] + 1;
+					q.offer(new Point(nx, ny));
 				}
 			}
 		}
