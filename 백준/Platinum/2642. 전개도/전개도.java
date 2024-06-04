@@ -32,7 +32,7 @@ class Main {
 			int cur[] = point[i];
 			if (!vis[cur[0]][cur[1]]) {
 				tempVis = new boolean[6][6];
-				dfs(cur[0], cur[1], 0, 0, block[cur[0]][cur[1]]);
+				dfs(cur[0], cur[1], 0, 0, cur[0], cur[1]);
 			}
 		}
 		if (pair != 3) {
@@ -42,20 +42,18 @@ class Main {
 		}
 	}
 
-	static void dfs(int x, int y, int cnt, int pre, int from) {
-		if (cnt == 0 || cnt == 2) {
-			if (!vis[x][y])
-				vis[x][y] = true;
-			else
-				return;
-		}
-		// 카운트가 2개면 짝 성립
+	static void dfs(int x, int y, int cnt, int pre, int fx, int fy) {
 		if (cnt == 2) {
-			pair++;
-			if (from == 1)
-				opposite = block[x][y];
-			if (block[x][y] == 1)
-				opposite = from;
+			if (!vis[fx][fy] && !vis[x][y]) {
+				// 카운트가 2개면 짝 성립
+				vis[fx][fy] = true;
+				vis[x][y] = true;
+				pair++;
+				if (block[fx][fy] == 1)
+					opposite = block[x][y];
+				if (block[x][y] == 1)
+					opposite = block[fx][fy];
+			}
 			return;
 		}
 		tempVis[x][y] = true;
@@ -65,13 +63,13 @@ class Main {
 			if (nx >= 0 && nx < 6 && ny >= 0 && ny < 6 && block[nx][ny] != 0 && !tempVis[nx][ny]) {
 				if (cnt == 0) {
 					// 시작 블록이면 방향 등록
-					dfs(nx, ny, cnt + 1, d, from);
+					dfs(nx, ny, cnt + 1, d, fx, fy);
 				} else if (pre == d) {
 					// 같은 방향이면 카운트 +1
-					dfs(nx, ny, cnt + 1, pre, from);
+					dfs(nx, ny, cnt + 1, pre, fx, fy);
 				} else {
 					// 다른 방향이면 이동만
-					dfs(nx, ny, cnt, pre, from);
+					dfs(nx, ny, cnt, pre, fx, fy);
 				}
 			}
 		}
