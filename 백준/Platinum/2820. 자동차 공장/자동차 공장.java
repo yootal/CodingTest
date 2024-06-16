@@ -31,7 +31,6 @@ class Main {
 		tree = new long[treeSize];
 		lazy = new long[treeSize];
 		dfs(1, 0);
-//		init(1, 1, N);
 		for (int i = 1; i <= N; i++) {
 			update_range(1, 1, N, S[i], S[i], arr[i]);
 		}
@@ -62,16 +61,6 @@ class Main {
 		}
 		E[x] = cnt;
 	}
-
-//	static void init(int node, int s, int e) {
-//		if (s == e) {
-//			tree[node] = arr[s];
-//		} else {
-//			init(node * 2, s, (s + e) / 2);
-//			init(node * 2 + 1, (s + e) / 2 + 1, e);
-//			tree[node] = tree[node * 2] + tree[node * 2 + 1];
-//		}
-//	}
 
 	static void update_lazy(int node, int s, int e) {
 		if (lazy[node] != 0) {
