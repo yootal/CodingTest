@@ -1,7 +1,7 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
-public class Main {
+class Main {
 	static int[] parent;
 
 	public static void main(String[] args) throws Exception {
@@ -10,22 +10,24 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
-		PriorityQueue<Edge> pq = new PriorityQueue<>();
+		Edge edges[] = new Edge[m];
 		for (int i = 0; i < m; i++) {
 			st = new StringTokenizer(br.readLine(), " ");
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			int v = Integer.parseInt(st.nextToken());
-			pq.offer(new Edge(a, b, v));
+			edges[i] = new Edge(a, b, v);
 		}
 		parent = new int[n + 1];
 		for (int i = 1; i <= n; i++) {
 			parent[i] = i;
 		}
+		Arrays.sort(edges);
 		int ans = 0;
 		int useCnt = 0;
+		int idx = 0;
 		while (useCnt < n - 1) {
-			Edge cur = pq.poll();
+			Edge cur = edges[idx++];
 			if (union(cur.a, cur.b)) {
 				ans += cur.value;
 				useCnt++;
@@ -45,14 +47,14 @@ public class Main {
 
 		@Override
 		public int compareTo(Edge o) {
-			return value - o.value;
+			return Integer.compare(this.value, o.value);
 		}
 	}
 
 	static int find(int x) {
-		if (x != parent[x])
-			parent[x] = find(parent[x]);
-		return parent[x];
+		if (x == parent[x])
+			return x;
+		return parent[x] = find(parent[x]);
 	}
 
 	static boolean union(int x, int y) {
