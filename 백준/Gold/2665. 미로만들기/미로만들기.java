@@ -18,27 +18,28 @@ public class Main {
                 } else room[i][j] = 1;
             }
         }
-        int[][] sdt = new int[N][N];
-        for (int[] row : sdt) {
-            Arrays.fill(row, N * N);
-        }
-        sdt[0][0] = 0;
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o[0]));
-        pq.offer(new int[]{sdt[0][0], 0, 0});
-        while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
-            if (cur[0] != sdt[cur[1]][cur[2]]) continue;
+        boolean[][] vis = new boolean[N][N];
+        ArrayDeque<int[]> q = new ArrayDeque<>();
+        vis[0][0] = true;
+        q.offer(new int[]{0, 0, 0});
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            if (cur[0] == N - 1 && cur[1] == N - 1) {
+                System.out.println(cur[2]);
+                break;
+            }
             for (int d = 0; d < 4; d++) {
-                int nx = cur[1] + dx[d];
-                int ny = cur[2] + dy[d];
-                if (nx >= 0 && nx < N && ny >= 0 && ny < N) {
-                    if (sdt[nx][ny] > sdt[cur[1]][cur[2]] + room[nx][ny]) {
-                        sdt[nx][ny] = sdt[cur[1]][cur[2]] + room[nx][ny];
-                        pq.offer(new int[]{sdt[nx][ny], nx, ny});
+                int nx = cur[0] + dx[d];
+                int ny = cur[1] + dy[d];
+                if (nx >= 0 && nx < N && ny >= 0 && ny < N && !vis[nx][ny]) {
+                    vis[nx][ny] = true;
+                    if (room[nx][ny] == 0) {
+                        q.offerFirst(new int[]{nx, ny, cur[2]});
+                    } else {
+                        q.offer(new int[]{nx, ny, cur[2] + 1});
                     }
                 }
             }
         }
-        System.out.println(sdt[N - 1][N - 1]);
     }
 }
