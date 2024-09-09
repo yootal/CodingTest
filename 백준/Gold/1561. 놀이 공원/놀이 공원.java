@@ -5,7 +5,6 @@ public class Main {
     static int N, M, ans;
     static long temp;
     static int[] time;
-    static boolean[] vis;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,14 +25,13 @@ public class Main {
     }
 
     static void binarySearch() {
-        long s = 0, e = 100000000000L;
+        long s = 0, e = N * 30L;
         while (s < e) {
             long mid = (s + e) / 2;
             long cnt = count(mid);
-//            System.out.println("mid: "+mid+" cnt: " + cnt);
             if (cnt + temp >= N) {
                 for (int idx = 0; idx < M; idx++) {
-                    if (!vis[idx]) {
+                    if (mid % time[idx] == 0) {
                         cnt++;
                         if (cnt == N) {
                             ans = idx + 1;
@@ -50,7 +48,6 @@ public class Main {
 
     static long count(long mid) {
         temp = 0;
-        vis = new boolean[M];
         long total = 0;
         for (int i = 0; i < M; i++) {
             long value = mid / time[i];
@@ -58,7 +55,6 @@ public class Main {
                 temp++;
             } else {
                 value++;
-                vis[i] = true;
             }
             total += value;
         }
