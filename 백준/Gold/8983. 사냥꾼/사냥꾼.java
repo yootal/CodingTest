@@ -11,7 +11,7 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
         L = Integer.parseInt(st.nextToken());
-        num = new int[N];
+        num = new int[M];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < M; i++) num[i] = Integer.parseInt(st.nextToken());
         Arrays.sort(num);
@@ -20,31 +20,20 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
-            if (binarySearch(x, y)) cnt++;
+            int idx = upperIdx(x);
+            if (L >= Math.min(Math.abs(num[idx - 1 < 0 ? idx : idx - 1] - x), Math.abs(num[idx % M] - x)) + y) cnt++;
         }
         System.out.println(cnt);
     }
 
-    static boolean binarySearch(int x, int y) {
-        int s = 0, e = N - 1;
-        while (s <= e) {
+    static int upperIdx(int target) {
+        int s = 0, e = M;
+        while (s < e) {
             int mid = (s + e) / 2;
-            int idx = num[mid];
-            int dist = Math.abs(idx - x) + y;
-            if (dist <= L) {
-                return true;
-            }
-            else {
-                int diff = idx - x;
-                if (diff > 0) {
-                    e = mid - 1;
-                } else if (diff < 0) {
-                    s = mid + 1;
-                } else {
-                    return false;
-                }
-            }
+            int pos = num[mid];
+            if (pos > target) e = mid;
+            else s = mid + 1;
         }
-        return false;
+        return s;
     }
 }
