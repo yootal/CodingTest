@@ -17,9 +17,9 @@ public class Main {
         for (int i = 1; i <= N; i++) {
             price[i] = Integer.parseInt(st.nextToken());
         }
-        int[][] dist = new int[N + 1][2501];
+        long[][] dist = new long[N + 1][2501];
         for (int i = 1; i <= N; i++) {
-            Arrays.fill(dist[i], (int) 1e9);
+            Arrays.fill(dist[i], (long) 1e15);
         }
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
@@ -29,22 +29,25 @@ public class Main {
             graph[a].add(new int[]{b, c});
             graph[b].add(new int[]{a, c});
         }
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
+        PriorityQueue<long[]> pq = new PriorityQueue<>(Comparator.comparingLong(o -> o[1]));
         dist[1][price[1]] = 0;
-        pq.offer(new int[]{1, dist[1][price[1]], price[1]}); // node, total, minCost
+        pq.offer(new long[]{1, dist[1][price[1]], price[1]});
         while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
-            if (cur[0] == N) {
-                System.out.println(cur[1]);
-                break;
-            }
-            for (int[] nxt : graph[cur[0]]) {
-                int nxtTotal = cur[1] + nxt[1] * cur[2];
-                if (dist[nxt[0]][cur[2]] > nxtTotal) {
-                    dist[nxt[0]][cur[2]] = nxtTotal;
-                    pq.offer(new int[]{nxt[0], nxtTotal, Math.min(cur[2], price[nxt[0]])});
+            long[] cur = pq.poll();
+            if (cur[1] != dist[(int) cur[0]][(int) cur[2]]) continue;
+            for (int[] nxt : graph[(int) cur[0]]) {
+                long nxtTotal = cur[1] + nxt[1] * cur[2];
+                int minCost = (int) Math.min(cur[2], price[nxt[0]]);
+                if (dist[nxt[0]][minCost] > nxtTotal) {
+                    dist[nxt[0]][minCost] = nxtTotal;
+                    pq.offer(new long[]{nxt[0], nxtTotal, minCost});
                 }
             }
         }
+        long ans = (long) 1e15;
+        for (int i = 1; i <= 2500; i++) {
+            ans = Math.min(ans, dist[N][i]);
+        }
+        System.out.println(ans);
     }
 }
