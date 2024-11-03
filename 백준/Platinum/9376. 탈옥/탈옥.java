@@ -16,9 +16,10 @@ public class Main {
             int M = Integer.parseInt(st.nextToken());
             char[][] board = new char[N + 2][M + 2];
             int[][][] open = new int[N + 2][M + 2][3];
+            boolean[][][] vis = new boolean[N + 2][M + 2][3];
             int[][] temp = new int[2][3];
             int idx = 0;
-            PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o[2]));
+            ArrayDeque<int[]> q = new ArrayDeque<>();
             for (int i = 0; i < N + 2; i++) {
                 for (int j = 0; j < M + 2; j++) {
                     Arrays.fill(open[i][j], 10000000);
@@ -35,29 +36,32 @@ public class Main {
                         temp[idx][1] = j;
                         temp[idx][2] = 0;
                         open[i][j][++idx] = 0;
+                        vis[i][j][idx] = true;
                     }
                 }
             }
             open[0][0][0] = 0;
+            vis[0][0][0] = true;
             for (int i = 0; i < 3; i++) {
                 if (i == 0) {
-                    pq.offer(new int[]{0, 0, 0});
+                    q.offer(new int[]{0, 0, 0});
                 } else {
-                    pq.offer(temp[i - 1]);
+                    q.offer(temp[i - 1]);
                 }
-                while (!pq.isEmpty()) {
-                    int[] cur = pq.poll();
-                    if (cur[2] != open[cur[0]][cur[1]][i]) continue;
+                while (!q.isEmpty()) {
+                    int[] cur = q.poll();
                     for (int d = 0; d < 4; d++) {
                         int nx = cur[0] + dx[d];
                         int ny = cur[1] + dy[d];
                         if (nx >= 0 && nx < N + 2 && ny >= 0 && ny < M + 2) {
-                            if (board[nx][ny] == '.' && open[nx][ny][i] > cur[2]) {
+                            if (board[nx][ny] == '.' && !vis[nx][ny][i]) {
+                                vis[nx][ny][i] = true;
                                 open[nx][ny][i] = cur[2];
-                                pq.offer(new int[]{nx, ny, open[nx][ny][i]});
-                            } else if (board[nx][ny] == '#' && open[nx][ny][i] > cur[2] + 1) {
+                                q.offerFirst(new int[]{nx, ny, open[nx][ny][i]});
+                            } else if (board[nx][ny] == '#' && !vis[nx][ny][i]) {
+                                vis[nx][ny][i] = true;
                                 open[nx][ny][i] = cur[2] + 1;
-                                pq.offer(new int[]{nx, ny, open[nx][ny][i]});
+                                q.offer(new int[]{nx, ny, open[nx][ny][i]});
                             }
                         }
                     }
