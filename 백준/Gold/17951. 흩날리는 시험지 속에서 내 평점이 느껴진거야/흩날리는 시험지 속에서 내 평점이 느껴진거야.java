@@ -15,7 +15,6 @@ public class Main {
             sum += num[i];
         }
         int s = 0, e = sum;
-        int ans = 0;
         while (s <= e) {
             int mid = (s + e) / 2;
             int cnt = 0;
@@ -27,15 +26,12 @@ public class Main {
                     cnt++;
                 }
             }
-            if (cnt == K) {
-                ans = Math.max(ans, mid);
-            }
-            if (cnt < K) {
-                e = mid - 1;
-            } else {
+            if (cnt >= K) {
                 s = mid + 1;
+            } else {
+                e = mid - 1;
             }
         }
-        System.out.println(ans);
+        System.out.println(e);
     }
 }
