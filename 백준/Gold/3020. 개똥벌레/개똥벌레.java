@@ -29,6 +29,7 @@ public class Main {
                 cnt++;
             }
         }
+        
         System.out.println(minH + " " + cnt);
     }
 }
