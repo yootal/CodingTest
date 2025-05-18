@@ -17,7 +17,7 @@ public class Main {
                 board[i][j] = row.charAt(j) == '\\' ? 0 : 1;
             }
         }
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o[3]));
+        ArrayDeque<int[]> q = new ArrayDeque<>();
         int[][][] vis = new int[N][M][2];
         for (int[][] vis2 : vis) {
             for (int[] vis3 : vis2) {
@@ -26,15 +26,16 @@ public class Main {
         }
         if (board[0][0] == 0) {
             vis[0][0][0] = 0;
-            pq.offer(new int[]{0, 0, 0, 0}); // x, y, 방향, 교체 횟수
+            q.offer(new int[]{0, 0, 0, 0}); // x, y, 방향, 교체 횟수
         } else {
             vis[0][0][1] = 0;
             vis[0][0][0] = 1;
-            pq.offer(new int[]{0, 0, 0, 1});
+            q.offer(new int[]{0, 0, 0, 1});
         }
         int cnt = Integer.MAX_VALUE;
-        while (!pq.isEmpty()) {
-            int[] cur = pq.poll();
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            if (cur[3] != vis[cur[0]][cur[1]][cur[2]]) continue;
             if (cur[0] == N - 1 && cur[1] == M - 1 && cur[2] == 0) {
                 cnt = cur[3];
                 break;
@@ -46,10 +47,10 @@ public class Main {
                 if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
                     if (board[nx][ny] == nxt && vis[nx][ny][nxt] > cur[3]) {
                         vis[nx][ny][nxt] = cur[3];
-                        pq.offer(new int[]{nx, ny, board[nx][ny], cur[3]});
+                        q.offerFirst(new int[]{nx, ny, board[nx][ny], cur[3]});
                     } else if (board[nx][ny] != nxt && vis[nx][ny][nxt] > cur[3] + 1) {
                         vis[nx][ny][nxt] = cur[3] + 1;
-                        pq.offer(new int[]{nx, ny, nxt, cur[3] + 1});
+                        q.offerLast(new int[]{nx, ny, nxt, cur[3] + 1});
                     }
                 }
             }
@@ -64,10 +65,10 @@ public class Main {
                 if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
                     if (board[nx][ny] == cur[2] && vis[nx][ny][cur[2]] > cur[3]) {
                         vis[nx][ny][cur[2]] = cur[3];
-                        pq.offer(new int[]{nx, ny, cur[2], cur[3]});
+                        q.offerFirst(new int[]{nx, ny, cur[2], cur[3]});
                     } else if (board[nx][ny] != cur[2] && vis[nx][ny][cur[2]] > cur[3] + 1) {
                         vis[nx][ny][cur[2]] = cur[3] + 1;
-                        pq.offer(new int[]{nx, ny, cur[2], cur[3] + 1});
+                        q.offerLast(new int[]{nx, ny, cur[2], cur[3] + 1});
                     }
                 }
             }
