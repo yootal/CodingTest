@@ -29,7 +29,7 @@ public class Main {
         Arrays.fill(dist1, 10000000);
         Arrays.fill(dist2, 10000000);
         dist1[100] = 0;
-        PriorityQueue<Info> q = new PriorityQueue<>(Comparator.comparingInt(info -> info.d));
+        ArrayDeque<Info> q = new ArrayDeque<>();
         q.offer(new Info(100, dist1[100], false));
         for (int i = 0; i < 10; i++) {
             if (!check[i]) {
