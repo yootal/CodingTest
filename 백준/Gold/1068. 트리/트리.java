@@ -2,46 +2,46 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	static ArrayList<Integer>[] al;
-	static int ans, erase;
-	static boolean vis[];
+    static int N, X, cnt;
+    static ArrayList<Integer>[] graph;
+    static boolean[] check;
 
-	public static void main(String[] args) throws Exception {
-		//System.setIn(new FileInputStream("res/input.txt"));
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		int n = Integer.parseInt(br.readLine());
-		al = new ArrayList[n];
-		vis = new boolean[n];
-		for (int i = 0; i < n; i++) {
-			al[i] = new ArrayList<>();
-		}
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int root = 0;
-		for (int i = 0; i < n; i++) {
-			int p = Integer.parseInt(st.nextToken());
-			if (p == -1)
-				root = i;
-			else {
-				al[p].add(i);
-				al[i].add(p);
-			}
-		}
-		erase = Integer.parseInt(br.readLine());
-		if (root != erase)
-			dfs(root);
-		System.out.println(ans);
-	}
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        graph = new ArrayList[N];
+        for (int i = 0; i < N; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        int s = -1;
+        for (int i = 0; i < N; i++) {
+            int p = Integer.parseInt(st.nextToken());
+            if (p == -1) {
+                s = i;
+                continue;
+            }
+            graph[p].add(i);
+        }
+        check = new boolean[N];
+        X = Integer.parseInt(br.readLine());
+        check[X] = true;
+        dfs(s);
+        System.out.println(cnt);
+    }
 
-	static void dfs(int x) {
-		vis[x] = true;
-		boolean flag = false;
-		for (int nxt : al[x]) {
-			if (vis[nxt] || nxt == erase)
-				continue;
-			dfs(nxt);
-			flag = true;
-		}
-		if (!flag)
-			ans++;
-	}
+    static void dfs(int idx) {
+        boolean flag = false;
+        if (!check[idx]) {
+            for (int nxt : graph[idx]) {
+                if (!check[nxt]) {
+                    flag = true;
+                    dfs(nxt);
+                }
+            }
+            if (!flag) {
+                cnt++;
+            }
+        }
+    }
 }
