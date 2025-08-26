@@ -2,17 +2,18 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
+    static int N;
     static int[] info;
     static int[][] dp;
     static ArrayList<Integer>[] graph;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        info = new int[N];
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < N; i++) {
+        StringTokenizer st;
+        N = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        info = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
             info[i] = Integer.parseInt(st.nextToken());
         }
         graph = new ArrayList[N + 1];
@@ -27,22 +28,21 @@ public class Main {
             graph[b].add(a);
         }
         dp = new int[N + 1][2];
-        System.out.println(Math.max(solve(1, 0, 0), solve(1, 1, 0) + info[0]));
+        System.out.println(Math.max(solve(1, 0, 1), solve(1, 1, 1) + info[1]));
     }
 
-    static int solve(int x, int flag, int pre) {
-        if (dp[x][flag] != 0) return dp[x][flag];
+    static int solve(int idx, int flag, int pre) {
+        if (dp[idx][flag] != 0) return dp[idx][flag];
         int value = 0;
-        for (int nxt : graph[x]) {
+        for (int nxt : graph[idx]) {
             if (nxt != pre) {
-                if (flag == 0) {
-                    value += Math.max(solve(nxt, 0, x), solve(nxt, 1, x) + info[nxt - 1]);
+                if (flag == 1) {
+                    value += solve(nxt, 0, idx);
                 } else {
-                    value += solve(nxt, 0, x);
+                    value += Math.max(solve(nxt, 0, idx), solve(nxt, 1, idx) + info[nxt]);
                 }
             }
         }
-        dp[x][flag] = value;
-        return dp[x][flag];
+        return dp[idx][flag] = value;
     }
 }
