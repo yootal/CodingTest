@@ -28,21 +28,19 @@ public class Main {
             graph[b].add(a);
         }
         dp = new int[N + 1][2];
-        System.out.println(Math.max(solve(1, 0, 1), solve(1, 1, 1) + info[1]));
+        solve(1, 0);
+        System.out.println(Math.max(dp[1][0], dp[1][1]));
     }
 
-    static int solve(int idx, int flag, int pre) {
-        if (dp[idx][flag] != 0) return dp[idx][flag];
-        int value = 0;
+    static void solve(int idx, int pre) {
+        dp[idx][0] = 0;
+        dp[idx][1] = info[idx];
         for (int nxt : graph[idx]) {
             if (nxt != pre) {
-                if (flag == 1) {
-                    value += solve(nxt, 0, idx);
-                } else {
-                    value += Math.max(solve(nxt, 0, idx), solve(nxt, 1, idx) + info[nxt]);
-                }
+                solve(nxt, idx);
+                dp[idx][0] += Math.max(dp[nxt][0], dp[nxt][1]);
+                dp[idx][1] += dp[nxt][0];
             }
         }
-        return dp[idx][flag] = value;
     }
 }
