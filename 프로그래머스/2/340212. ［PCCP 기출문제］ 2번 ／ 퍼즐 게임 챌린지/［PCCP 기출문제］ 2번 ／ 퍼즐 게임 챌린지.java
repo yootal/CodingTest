@@ -1,8 +1,10 @@
 class Solution {
+    // check(mid) == check(lo) -> s = mid
+    // else -> e = mid
     public int solution(int[] diffs, int[] times, long limit) {
         int n = diffs.length;
-        int s = 1, e = 100000;
-        while(s < e){
+        int s = 0, e = 100001;
+        while(s + 1 < e){
             long value = 0;
             int level = (s+e)/2;
             for(int i = 0 ; i < n ; i++){
@@ -16,14 +18,10 @@ class Solution {
                     value += (curTime + preTime)*(curDiff-level)+curTime;
                 }
             }
-            if(value <= limit){
-                e = level;
-            }
-            else{
-                s = level + 1;
-            }
+            if(limit < value) s = level;
+            else e = level;
         }
-        int answer = s;
+        int answer = e;
         return answer;
     }
 }
