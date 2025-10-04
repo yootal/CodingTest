@@ -1,54 +1,51 @@
 class Solution {
-    static String bi;
-    static boolean biCheck;
+    
     public int[] solution(long[] numbers) {
         int[] answer = new int[numbers.length];
         for(int i = 0 ; i < numbers.length ; i++){
             long num = numbers[i];
             StringBuilder sb = new StringBuilder();
-            if (num == 0) {
-                sb.append('0');
-            } else {
-                while (num > 0) {
-                    sb.append(num % 2);
-                    num /= 2;
-                }
-                sb.reverse();
+            while (num > 0) {
+                sb.append(num % 2);
+                num /= 2;
             }
-            bi = sb.toString();
-            int len = bi.length();
+            int len = sb.length();
             int target = 1;
-            while (target < len) 
-                target = target * 2 + 1;
-            if (target > len) {
-                StringBuilder pad = new StringBuilder();
-                for (int z = 0; z < target - len; z++) pad.append('0');
-                pad.append(bi);
-                bi = pad.toString();
-            }
-            biCheck = true;
-            int mid = bi.length() / 2;
-            if(bi.charAt(mid) == '1'){
-                dfs(mid,0,bi.length()-1,true);
-            }
-            else{
-                dfs(mid,0,bi.length()-1,false);
-            }
-            answer[i] = biCheck ? 1 : 0; 
+            while ((target - 1) < len) target *= 2;
+            for (int z = 0; z < target - 1 - len; z++) sb.append('0');
+            String s = sb.reverse().toString();
+            int mid = s.length() / 2;
+            boolean flag;
+            if(s.charAt(mid) == '1') flag = tree(s);
+            else flag = false;
+            answer[i] = flag ? 1 : 0; 
         }
         return answer;
     }
     
-    static void dfs(int x, int l, int r, boolean flag){
-        if(!biCheck) return;
-        int size = x - l;
-        boolean check = bi.charAt(x) == '0' ? false : true;
-        if(!flag && check) {
-            biCheck = false;
-            return;
+    static boolean tree(String s){
+        int len = s.length();
+        if(len == 1){
+            return true; 
         }
-        if(l == r) return;
-        dfs(l + (size/2), l, x - 1, check);
-        dfs(x + 1 + (size/2), x + 1, r, check);
+        int mid = len / 2;
+        String left = s.substring(0,mid);
+        String right = s.substring(mid+1);
+        if(s.charAt(mid) == '1'){
+            return tree(left) && tree(right);
+        }
+        return zero(left) && zero(right);
+    }
+    
+    static boolean zero(String s){
+        int len = s.length();
+        if(len == 1){
+            return s.charAt(0) == '0' ? true : false; 
+        }
+        int mid = len / 2;
+        if(s.charAt(mid) != '0') return false;
+        String left = s.substring(0,mid);
+        String right = s.substring(mid+1);
+        return zero(left) && zero(right);
     }
 }
