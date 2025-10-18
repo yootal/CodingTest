@@ -14,8 +14,8 @@ class Solution {
             int a = map.get(temp[0]);
             int b = map.get(temp[1]);
             info[a][b]++;
-            give.put(temp[0],give.getOrDefault(temp[0], 0) + 1);
-            get.put(temp[1],get.getOrDefault(temp[1], 0) + 1);
+            give.compute(temp[0], (k, v) -> v == null ? 1 : v + 1);
+            get.compute(temp[1], (k, v) -> v == null ? 1 : v + 1);
         }
         int[] count = new int[friends.length];
         for(int i = 0 ; i < friends.length ; i++){
