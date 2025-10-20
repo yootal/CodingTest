@@ -7,9 +7,7 @@ class Solution {
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1])); 
         int len = food_times.length;
         tf = new int[len];
-        for(int i = 0 ; i < len ; i++){
-            tf[i] = food_times[i];
-        }
+        for(int i = 0 ; i < len ; i++) tf[i] = food_times[i];
         Arrays.sort(tf);
         long sum = 0;
         for(int i = 0 ; i < food_times.length ; i++){
@@ -17,7 +15,7 @@ class Solution {
             sum += cur;
             pq.offer(new int[]{i,cur});
         }
-        if(sum <= k) return -1;
+        if(sum <= k) return answer;
         int cycle = 0;
         while(!pq.isEmpty() && k - (long) len * (pq.peek()[1] - cycle) > 0){
             int out = pq.peek()[1];
@@ -33,14 +31,12 @@ class Solution {
         long pos = k % len;
         for (int i = 0; i < food_times.length; i++) {
             if (food_times[i] == 0) continue;
-            if (pos == 0) return i + 1;
+            if (pos == 0) {
+                answer = i + 1;
+                break;
+            }
             pos--;
         }
-        for(int i = 0 ; i < food_times.length ; i++){
-            if(food_times[i] == 0) continue;
-            k--;
-            if(k == -1) answer = i + 1;
-        }   
         return answer;
     }
     
